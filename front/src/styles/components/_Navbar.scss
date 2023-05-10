@@ -1,0 +1,33 @@
+#navbar {
+  height: 150px;
+  background: $color-primary;
+  position: relative;
+
+  @include md {
+    height: 200px;
+  }
+
+  &-logo {
+    height: 100%;
+  }
+}
+
+#logout-button {
+  height: 25px;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  color: $white;
+  cursor: pointer;
+
+  & span {
+    display: none;
+
+    @include md {
+      display: block;
+      margin-right: 6px;
+    }
+  }
+}
