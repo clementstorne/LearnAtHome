@@ -8,5 +8,5 @@ import { Link } from "react-router-dom";
  * @component
  */
 export default function LinkLogin() {
-  return <Link to={`/signup`} className="link">{`J'ai déjà un compte`}</Link>;
+  return <Link to={`/login`} className="link">{`J'ai déjà un compte`}</Link>;
 }

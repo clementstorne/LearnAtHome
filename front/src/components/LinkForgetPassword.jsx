@@ -12,6 +12,6 @@ export default function LinkForgetPassword() {
     <Link
       to={`/forget-password`}
       className="link"
-    >{`J'ai oublié mon mot de passe`}</Link>
+    >{`J’ai oublié mon mot de passe`}</Link>
   );
 }

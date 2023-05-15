@@ -1,0 +1,35 @@
+.signup {
+  &-field {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+
+      &:checked {
+        + .signup-label {
+          &:before {
+            background-color: $color-secondary;
+            box-shadow: inset 0 0 0 4px $white;
+          }
+        }
+      }
+    }
+  }
+
+  &-label {
+    &:before {
+      content: "";
+      width: 20px;
+      height: 20px;
+      background: $white;
+      border-radius: 100%;
+      display: inline-block;
+      margin-right: 10px;
+      vertical-align: top;
+      cursor: pointer;
+      transition: all 300ms ease;
+    }
+  }
+}
