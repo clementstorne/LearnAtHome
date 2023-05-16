@@ -11,7 +11,7 @@ import SignUp from "./SignUp";
 import ToDoList from "./ToDoList";
 
 /** Components */
-// import AuthGuard from "../components/AuthGuard";
+import AuthGuard from "../components/AuthGuard";
 
 /**
  * The router component.
@@ -24,10 +24,38 @@ export default function Router() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/calendar" element={<Calendar />} />
-        <Route path="/chat" element={<Chat />} />
-        <Route path="/todo" element={<ToDoList />} />
+        <Route
+          path="/"
+          element={
+            <AuthGuard>
+              <Dashboard />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/calendar"
+          element={
+            <AuthGuard>
+              <Calendar />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            <AuthGuard>
+              <Chat />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/todo"
+          element={
+            <AuthGuard>
+              <ToDoList />
+            </AuthGuard>
+          }
+        />
         {/* <Route
           path="/profile"
           element={
