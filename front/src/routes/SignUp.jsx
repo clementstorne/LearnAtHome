@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 /** Components */
-import Navbar from "../components/Navbar";
+import Header from "../components/Header";
 import LinkLogin from "../components/LinkLogin";
 
 /** Store */
@@ -45,7 +45,7 @@ export default function SignUp() {
 
   return (
     <>
-      <Navbar />
+      <Header shadow={false} />
 
       <div className="login-form-wrapper">
         <form id="login-form" action="" onSubmit={handleLogin}>

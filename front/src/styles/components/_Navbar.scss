@@ -1,33 +1,80 @@
-#navbar {
-  height: 150px;
+.navbar {
+  height: 60px;
+  width: 100%;
+  z-index: 10;
+  margin: 0;
+  position: sticky;
+  right: 0;
+  bottom: 0;
+  left: 0;
   background: $color-primary;
-  position: relative;
+  box-shadow: 0px -4px 4px rgba($black, 0.25);
 
   @include md {
-    height: 200px;
+    height: calc(100vh - 200px);
+    width: 120px;
+    padding: 50px 0;
+    top: 200px;
+    box-shadow: none;
+    background: $white;
   }
 
-  &-logo {
-    height: 100%;
-  }
-}
-
-#logout-button {
-  height: 25px;
-  display: flex;
-  align-items: center;
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  color: $white;
-  cursor: pointer;
-
-  & span {
-    display: none;
+  &-nav {
+    margin: 0;
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    align-items: center;
 
     @include md {
-      display: block;
-      margin-right: 6px;
+      height: calc(100vh - 300px);
+      padding: 15vh 0;
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: space-around;
+      align-items: center;
+      border-right: 1px solid $medium-gray;
+    }
+  }
+
+  &-link {
+    height: 40px;
+    margin: 10px 0;
+    transition: all 300ms ease;
+
+    @include md {
+      height: 70px;
+      width: 70px;
+      background: $color-primary;
+      border-radius: 50%;
+    }
+
+    &:hover {
+      background: $color-secondary;
+    }
+  }
+
+  &-separator {
+    border-left: solid 1px $white;
+    border-right: solid 1px $white;
+
+    @include md {
+      border: none;
+    }
+  }
+
+  & svg {
+    height: 30px;
+    width: 30px;
+    color: $white;
+    margin: 5px 0;
+
+    @include md {
+      height: 40px;
+      width: 40px;
+      margin: 15px;
     }
   }
 }

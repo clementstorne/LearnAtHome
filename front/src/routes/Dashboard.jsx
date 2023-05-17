@@ -2,7 +2,7 @@
 import "../main.scss";
 
 /** Components */
-import Navbar from "../components/Navbar";
+import Header from "../components/Header";
 
 /** Assets */
 
@@ -13,7 +13,7 @@ import Navbar from "../components/Navbar";
 export default function Dashboard() {
   return (
     <>
-      <Navbar />
+      <Header />
     </>
   );
 }

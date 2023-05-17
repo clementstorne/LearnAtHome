@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 /** Components */
-import Navbar from "../components/Navbar";
+import Header from "../components/Header";
 import LinkForgetPassword from "../components/LinkForgetPassword";
 import LinkSignup from "../components/LinkSignup";
 
@@ -42,7 +42,7 @@ export default function Login() {
 
   return (
     <>
-      <Navbar />
+      <Header shadow={false} />
 
       <div className="login-form-wrapper">
         <form id="login-form" action="" onSubmit={handleLogin}>

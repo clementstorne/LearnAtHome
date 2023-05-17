@@ -29,9 +29,16 @@
   -moz-box-shadow: 5px 5px 5px 0px rgba($white, 0.4);
 }
 
-@mixin auto-min-height($margin, $padding) {
-  min-height: calc(100vh - 150px - $margin - $padding);
+@mixin auto-min-height {
+  min-height: calc(100vh - 150px);
   @include md {
-    min-height: calc(100vh - 200px - $margin - $padding);
+    min-height: calc(100vh - 200px);
+  }
+}
+
+@mixin auto-min-height-with-navbar {
+  min-height: calc(100vh - 210px);
+  @include md {
+    min-height: calc(100vh - 200px);
   }
 }

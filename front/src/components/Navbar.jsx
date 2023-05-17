@@ -2,51 +2,37 @@
 import "../main.scss";
 
 /** React Router */
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 /** Store */
-import { useSelector, useDispatch } from "react-redux";
-import { userLogout } from "../store/userSlice";
 
 /** Assets */
-import logo from "../assets/Logo.svg";
-import { FaPowerOff } from "react-icons/fa";
+import { BsChatText, BsCalendar4Week, BsListTask } from "react-icons/bs";
 
 /**
  * Component for showing the navbar.
  * @component
  */
 export default function Navbar() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  let isAuth = useSelector((state) => state.auth.isAuth);
-
-  function logout(e) {
-    e.preventDefault();
-    dispatch(userLogout());
-    navigate("/");
-  }
-
   return (
-    <nav id="navbar">
-      {isAuth === true ? (
-        <Link to={`/`}>
-          <img id="navbar-logo" src={logo} alt="Learn@Home Logo" />
-        </Link>
-      ) : (
-        <Link to={`/login`}>
-          <img id="navbar-logo" src={logo} alt="Learn@Home Logo" />
-        </Link>
-      )}
-      {isAuth === true ? (
-        <div id="logout-button" onClick={logout}>
-          <span>Se déconnecter</span>
-          <FaPowerOff />
-        </div>
-      ) : (
-        <></>
-      )}
+    <nav className="navbar">
+      <ul className="navbar-nav">
+        <li className="navbar-link">
+          <Link to={`/chat`}>
+            <BsChatText />
+          </Link>
+        </li>
+        <li className="navbar-link navbar-separator">
+          <Link to={`/calendar`}>
+            <BsCalendar4Week />
+          </Link>
+        </li>
+        <li className="navbar-link">
+          <Link to={`/todo`}>
+            <BsListTask />
+          </Link>
+        </li>
+      </ul>
     </nav>
   );
 }

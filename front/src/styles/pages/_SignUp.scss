@@ -19,6 +19,8 @@
   }
 
   &-label {
+    cursor: pointer;
+
     &:before {
       content: "";
       width: 20px;

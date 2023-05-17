@@ -1,0 +1,43 @@
+.header {
+  height: 150px;
+  background: $color-primary;
+  z-index: 20;
+  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
+  box-shadow: 0px 8px 16px rgba($black, 0.25);
+
+  @include md {
+    height: 200px;
+    box-shadow: 0px 10px 20px rgba($black, 0.25);
+  }
+
+  &-logo {
+    height: 100%;
+  }
+}
+
+#logout-button {
+  height: 25px;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  color: $white;
+  cursor: pointer;
+
+  & span {
+    display: none;
+
+    @include md {
+      display: block;
+      margin-right: 6px;
+    }
+  }
+}
+
+.no-shadow {
+  box-shadow: none;
+}

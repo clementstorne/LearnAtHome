@@ -1,8 +1,12 @@
 .login {
   &-form-wrapper {
-    @include auto-min-height(20px, 0px);
+    @include auto-min-height;
     padding: 10px 20px;
     background: $color-primary;
+
+    @include md {
+      max-height: calc(100vh - 200px);
+    }
   }
 
   &-field {
