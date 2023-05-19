@@ -17,6 +17,9 @@ import { useDispatch } from "react-redux";
 // import { userLogin } from "../store/userSlice";
 import { login } from "../store/authSlice.js";
 
+/** Helpers */
+// import FormValidatorHelpers from "../helpers/FormValidatorHelpers";
+
 /**
  * Component for showing the login page.
  * @component
@@ -30,12 +33,10 @@ export default function Login() {
 
   function handleLogin(e) {
     e.preventDefault();
-
     const credentials = {
       email,
       password,
     };
-
     dispatch(login(credentials));
     navigate("/profile");
   }
@@ -47,32 +48,40 @@ export default function Login() {
       <div className="login-form-wrapper">
         <form id="login-form" action="" onSubmit={handleLogin}>
           <div className="login-field">
-            <label htmlFor="email" className="login-label">
+            <label htmlFor="email" id="email-label" className="login-label">
               Email
             </label>
             <input
               type="email"
+              autoComplete="email"
               id="email"
-              required
+              aria-describedby="email-label"
               aria-required="true"
+              spellCheck="false"
               className="login-input"
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="login-field">
-            <label htmlFor="password" className="login-label">
+            <label
+              htmlFor="password"
+              id="password-label"
+              className="login-label"
+            >
               Mot de passe
             </label>
             <input
               type="password"
+              autoComplete="current-password"
               id="password"
-              required
+              aria-describedby="password-label"
               aria-required="true"
+              spellCheck="false"
               className="login-input"
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <input type="submit" className="login-button" value="S'inscrire" />
+          <input type="submit" className="login-button" value="Se connecter" />
         </form>
 
         <div id="links">

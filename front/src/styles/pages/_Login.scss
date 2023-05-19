@@ -14,10 +14,44 @@
     flex-flow: column nowrap;
     justify-content: flex-start;
     align-items: center;
+    margin-bottom: 15px;
 
     @include md {
       max-width: 600px;
       margin: 0 auto;
+    }
+
+    &-error {
+      color: $color-secondary;
+      font-size: 14px;
+
+      &-logo {
+        color: $color-secondary;
+        display: inline-block;
+      }
+    }
+
+    &-constraint {
+      margin: 5px 5px;
+      color: $white;
+      border-radius: 20px;
+      font-size: 12px;
+
+      &-fulfilled {
+        color: $color-tertiary;
+      }
+
+      &-logo {
+        display: inline-block;
+        margin-right: 2px;
+      }
+
+      &-wrapper {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+        align-items: center;
+      }
     }
   }
 
@@ -32,13 +66,12 @@
   &-input {
     height: 70px;
     width: 100%;
-    margin-bottom: 15px;
     border-radius: 10px;
     text-align: center;
     font-size: 18px;
 
     &:focus {
-      outline: 3px solid $color-tertiary;
+      outline: 3px dotted $color-tertiary;
     }
 
     &-radio {
@@ -49,7 +82,7 @@
   &-button {
     width: 77%;
     height: 70px;
-    margin: 50px 0 30px;
+    margin: 25px 0 25px;
     border-radius: 10px;
     background: $color-tertiary;
     color: $color-primary;
