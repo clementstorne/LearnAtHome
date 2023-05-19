@@ -14,7 +14,7 @@ import LinkLogin from "../components/LinkLogin";
 /** Store */
 import { useDispatch } from "react-redux";
 // import { userLogin } from "../store/userSlice";
-import { login } from "../store/authSlice.js";
+import { signup } from "../store/authSlice.js";
 
 /** Assets */
 import {
@@ -211,13 +211,13 @@ export default function SignUp() {
       !passwordErrorMessage
     ) {
       const credentials = {
+        name,
         email,
         password,
-        name,
         role,
       };
 
-      dispatch(login(credentials));
+      dispatch(signup(credentials));
       navigate("/profile");
     }
   }
@@ -418,7 +418,7 @@ export default function SignUp() {
           </div>
           <div className="login-field">
             <label
-              htmlFor="password"
+              htmlFor="password-confirmation"
               id="password-confirmation-label"
               className="login-label"
             >
@@ -445,12 +445,26 @@ export default function SignUp() {
             />
             <div className="login-field-error">{passwordErrorMessage}</div>
           </div>
-          <div className="login-field signup-field">
+          <div
+            className="login-field signup-field"
+            role="radiogroup"
+            aria-labelledby="role-label"
+          >
+            <label
+              htmlFor="role"
+              id="role-label"
+              className="login-label hidden"
+              aria-hidden="true"
+            >
+              Rôle
+            </label>
             <input
               type="radio"
               id="student"
               name="role"
               value="student"
+              tabIndex="0"
+              aria-checked={role === "student"}
               checked={role === "student"}
               onChange={(e) => setRole(e.target.value)}
             />
@@ -462,6 +476,8 @@ export default function SignUp() {
               id="tutor"
               name="role"
               value="tutor"
+              tabIndex="-1"
+              aria-checked={role === "tutor"}
               checked={role === "tutor"}
               onChange={(e) => setRole(e.target.value)}
             />

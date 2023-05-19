@@ -17,8 +17,11 @@ import { useDispatch } from "react-redux";
 // import { userLogin } from "../store/userSlice";
 import { login } from "../store/authSlice.js";
 
+/** Assets */
+import { BsExclamationTriangleFill } from "react-icons/bs";
+
 /** Helpers */
-// import FormValidatorHelpers from "../helpers/FormValidatorHelpers";
+import FormValidatorHelpers from "../helpers/FormValidatorHelpers";
 
 /**
  * Component for showing the login page.
@@ -30,15 +33,45 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
 
+  /**
+   * On change in the email input, checks if the user input is correct and stores it or displays a message if not.
+   * @param {Event} e
+   */
+  function handleEmailChange(e) {
+    e.preventDefault();
+
+    setEmail(e.target.value);
+    if (e.target.value.length >= 1) {
+      if (!FormValidatorHelpers.isEmailValid(e.target.value)) {
+        e.target.setAttribute("aria-invalid", "true");
+        setEmailErrorMessage("Le format de l'email est incorrect");
+      } else {
+        e.target.removeAttribute("aria-invalid");
+        setEmailErrorMessage("");
+      }
+    } else {
+      setEmailErrorMessage("Veuillez saisir votre email");
+    }
+  }
+
+  /**
+   * Checks if the email is valid, submit form et navigate to dashboard.
+   * @param {Event} e
+   * @returns
+   */
   function handleLogin(e) {
     e.preventDefault();
-    const credentials = {
-      email,
-      password,
-    };
-    dispatch(login(credentials));
-    navigate("/profile");
+    if (!emailErrorMessage) {
+      const credentials = {
+        email,
+        password,
+      };
+
+      dispatch(login(credentials));
+      navigate("/profile");
+    }
   }
 
   return (
@@ -49,6 +82,14 @@ export default function Login() {
         <form id="login-form" action="" onSubmit={handleLogin}>
           <div className="login-field">
             <label htmlFor="email" id="email-label" className="login-label">
+              <span
+                className={`login-field-error-logo ${
+                  !emailErrorMessage ? "hidden" : ""
+                }`}
+                aria-hidden={`${!emailErrorMessage ? "true" : "false"}`}
+              >
+                <BsExclamationTriangleFill />
+              </span>{" "}
               Email
             </label>
             <input
@@ -56,11 +97,13 @@ export default function Login() {
               autoComplete="email"
               id="email"
               aria-describedby="email-label"
+              required
               aria-required="true"
               spellCheck="false"
               className="login-input"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleEmailChange}
             />
+            <div className="login-field-error">{emailErrorMessage}</div>
           </div>
           <div className="login-field">
             <label

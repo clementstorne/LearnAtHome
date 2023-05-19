@@ -13,29 +13,64 @@ import LinkLogin from "../components/LinkLogin";
 import LinkSignup from "../components/LinkSignup";
 
 /** Store */
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 // import { userLogin } from "../store/userSlice";
-import { login } from "../store/authSlice.js";
+
+/** Assets */
+import { BsExclamationTriangleFill } from "react-icons/bs";
+
+/** Helpers */
+import FormValidatorHelpers from "../helpers/FormValidatorHelpers";
 
 /**
  * Component for showing the login page.
  * @component
  */
 export default function ForgetPassword() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
 
+  /**
+   * On change in the email input, checks if the user input is correct and stores it or displays a message if not.
+   * @param {Event} e
+   */
+  function handleEmailChange(e) {
+    e.preventDefault();
+
+    setEmail(e.target.value);
+    if (e.target.value.length >= 1) {
+      if (!FormValidatorHelpers.isEmailValid(e.target.value)) {
+        e.target.setAttribute("aria-invalid", "true");
+        setEmailErrorMessage("Le format de l'email est incorrect");
+      } else {
+        e.target.removeAttribute("aria-invalid");
+        setEmailErrorMessage("");
+      }
+    } else {
+      setEmailErrorMessage("Veuillez saisir votre email");
+    }
+  }
+
+  /**
+   * Checks if the email is valid, submit form et navigate to login page.
+   * @param {Event} e
+   * @returns
+   */
   function handleForgetPassword(e) {
     e.preventDefault();
 
-    const credentials = {
-      email,
-    };
+    if (!emailErrorMessage) {
+      const credentials = {
+        email,
+      };
 
-    dispatch(login(credentials));
-    navigate("/login");
+      console.log(credentials);
+      // dispatch(login(credentials));
+      navigate("/login");
+    }
   }
 
   return (
@@ -45,18 +80,29 @@ export default function ForgetPassword() {
       <div className="login-form-wrapper">
         <form id="login-form" action="" onSubmit={handleForgetPassword}>
           <div className="login-field">
-            <label htmlFor="email" className="login-label">
+            <label htmlFor="email" id="email-label" className="login-label">
+              <span
+                className={`login-field-error-logo ${
+                  !emailErrorMessage ? "hidden" : ""
+                }`}
+                aria-hidden={`${!emailErrorMessage ? "true" : "false"}`}
+              >
+                <BsExclamationTriangleFill />
+              </span>{" "}
               Email
             </label>
             <input
               type="email"
-              id="email"
-              required
               autoComplete="email"
+              id="email"
+              aria-describedby="email-label"
+              required
               aria-required="true"
+              spellCheck="false"
               className="login-input"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleEmailChange}
             />
+            <div className="login-field-error">{emailErrorMessage}</div>
           </div>
           <input type="submit" className="login-button" value="Réinitialiser" />
         </form>

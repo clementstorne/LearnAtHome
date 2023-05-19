@@ -9,6 +9,14 @@ const initialState = {
   isAuth: false,
 };
 
+export const signup = createAsyncThunk(
+  "auth/login",
+  async ({ name, email, password, role }) => {
+    const res = await AuthService.signup({ name, email, password, role });
+    return res.data;
+  }
+);
+
 export const login = createAsyncThunk(
   "auth/login",
   async ({ email, password }) => {
