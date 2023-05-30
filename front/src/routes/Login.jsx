@@ -5,7 +5,7 @@ import "../main.scss";
 import { useState } from "react";
 
 /** React Router */
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 /** Components */
 import Header from "../components/Header";
@@ -13,8 +13,7 @@ import LinkForgetPassword from "../components/LinkForgetPassword";
 import LinkSignup from "../components/LinkSignup";
 
 /** Store */
-import { useDispatch } from "react-redux";
-// import { userLogin } from "../store/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/authSlice.js";
 
 /** Assets */
@@ -29,11 +28,13 @@ import FormValidatorHelpers from "../helpers/FormValidatorHelpers";
  */
 export default function Login() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
+
+  const isAuth = useSelector((state) => state.auth.isAuth);
 
   /**
    * On change in the email input, checks if the user input is correct and stores it or displays a message if not.
@@ -61,21 +62,20 @@ export default function Login() {
    * @param {Event} e
    * @returns
    */
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault();
     if (!emailErrorMessage) {
       const credentials = {
         email,
         password,
       };
-
       dispatch(login(credentials));
-      navigate("/profile");
     }
   }
 
   return (
     <>
+      {isAuth && <Navigate to="/" replace={true} />}
       <Header shadow={false} />
 
       <div className="login-form-wrapper">

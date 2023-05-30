@@ -13,8 +13,12 @@ class AuthService {
    * @param   {String}  credentials.role      The user's role.
    * @return  {String}                        JSON Web Token.
    */
+  static signupTutor = async (credentials) => {
+    return axios.post("auth/signup/tutors", credentials);
+  };
+
   static signup = async (credentials) => {
-    return axios.post("/signup", credentials);
+    return axios.post("auth/signup", credentials);
   };
 
   /**
@@ -24,8 +28,12 @@ class AuthService {
    * @param   {String}  credentials.password  The user's password.
    * @return  {String}                        JSON Web Token.
    */
+  static loginTutor = async (credentials) => {
+    return axios.post("/auth/login/tutors", credentials);
+  };
+
   static login = async (credentials) => {
-    return axios.post("/login", credentials);
+    return axios.post("/auth/login", credentials);
   };
 }
 

@@ -1,0 +1,169 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Tutor {
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(100)
+  email       String    @unique(map: "email") @db.VarChar(100)
+  password    String    @db.VarChar(64)
+  imageUrl    String?   @db.VarChar(255)
+  role        Roles
+  isAvailable Boolean   @default(false)
+  createdAt   DateTime  @default(now()) @db.DateTime(0)
+  updatedAt   DateTime? @updatedAt @db.DateTime(0)
+  students    Student[]
+  // students     Student[]      @relation("StudentTutor")
+  // StudentTutor StudentTutor[]
+  grades      Grade[]
+  // grades       Grade[]        @relation("GradeTutor")
+  // GradeTutor   GradeTutor[]
+  subjects    Subject[]
+  // subjects     Subject[]      @relation("SubjectTutor")
+  // SubjectTutor SubjectTutor[]
+  events      Event[]
+  messages    Message[]
+  tasks       Task[]
+}
+
+model Student {
+  id        String      @id @default(uuid())
+  name      String      @db.VarChar(100)
+  email     String      @unique(map: "email") @db.VarChar(100)
+  password  String      @db.VarChar(64)
+  imageUrl  String?     @db.VarChar(255)
+  role      Roles
+  createdAt DateTime    @default(now()) @db.DateTime(0)
+  updatedAt DateTime?   @updatedAt @db.DateTime(0)
+  grade     Grade?      @relation(fields: [gradeName], references: [name], onDelete: Cascade)
+  gradeName Grade_name?
+  tutors    Tutor[]
+  // tutors       Tutor[]        @relation("StudentTutor")
+  // StudentTutor StudentTutor[]
+
+  @@index([gradeName], map: "GradeName")
+}
+
+model Grade {
+  name      Grade_name @id
+  createdAt DateTime   @default(now()) @db.DateTime(0)
+  updatedAt DateTime?  @updatedAt @db.DateTime(0)
+  students  Student[]
+  tutors    Tutor[]
+  // tutors     Tutor[]      @relation("GradeTutor")
+  // GradeTutor GradeTutor[]
+}
+
+model Subject {
+  name      Subject_name @id
+  createdAt DateTime     @default(now()) @db.DateTime(0)
+  updatedAt DateTime?    @updatedAt @db.DateTime(0)
+  tutors    Tutor[]
+  // tutors       Tutor[]        @relation("SubjectTutor")
+  // SubjectTutor SubjectTutor[]
+}
+
+model Message {
+  id        String    @id @default(uuid())
+  content   String    @db.Text
+  mediaUrl  String?   @db.VarChar(255)
+  isRead    Boolean   @default(false)
+  createdAt DateTime  @default(now()) @db.DateTime(0)
+  updatedAt DateTime? @updatedAt @db.DateTime(0)
+  tutorId   String    @db.Char(36)
+  tutor     Tutor     @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+
+  @@index([tutorId], map: "TutorId")
+}
+
+model Event {
+  id        String         @id @default(uuid())
+  title     String         @db.VarChar(100)
+  place     String         @db.VarChar(100)
+  startTime DateTime       @db.DateTime(0)
+  endTime   DateTime       @db.DateTime(0)
+  category  Event_category @default(Learn_Home)
+  createdAt DateTime       @default(now()) @db.DateTime(0)
+  updatedAt DateTime?      @updatedAt @db.DateTime(0)
+  TutorId   String         @db.Char(36)
+  Tutor     Tutor          @relation(fields: [TutorId], references: [id], onDelete: Cascade)
+
+  @@index([TutorId], map: "TutorId")
+}
+
+model Task {
+  id        String    @id @default(uuid())
+  content   String    @db.VarChar(100)
+  isDone    Boolean   @default(false)
+  createdAt DateTime  @default(now()) @db.DateTime(0)
+  updatedAt DateTime? @updatedAt @db.DateTime(0)
+  TutorId   String    @db.Char(36)
+  Tutor     Tutor     @relation(fields: [TutorId], references: [id], onDelete: Cascade)
+
+  @@index([TutorId], map: "TutorId")
+}
+
+// Tables d'association
+
+// model StudentTutor {
+//   id        String  @id @default(uuid())
+//   studentId String
+//   student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+//   tutorId   String
+//   tutor     Tutor   @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+// }
+
+// model GradeTutor {
+//   id        String     @id @default(uuid())
+//   gradeName Grade_name
+//   grade     Grade      @relation(fields: [gradeName], references: [name], onDelete: Cascade)
+//   tutorId   String
+//   tutor     Tutor      @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+// }
+
+// model SubjectTutor {
+//   id          String       @id @default(uuid())
+//   subjectName Subject_name
+//   subject     Subject      @relation(fields: [subjectName], references: [name], onDelete: Cascade)
+//   tutorId     String
+//   tutor       Tutor        @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+// }
+
+// Enumerations
+
+enum Roles {
+  student
+  tutor
+}
+
+enum Grade_name {
+  Sixi_me   @map("Sixième")
+  Cinqui_me @map("Cinquième")
+  Quatri_me @map("Quatrième")
+  Troisi_me @map("Troisième")
+  Seconde
+  Premi_re  @map("Première")
+  Terminale
+}
+
+enum Subject_name {
+  Fran_ais        @map("Français")
+  Math_matiques   @map("Mathématiques")
+  Anglais
+  Espagnol
+  Histoire
+  G_ographie      @map("Géographie")
+  SVT
+  Physique_Chimie @map("Physique-Chimie")
+}
+
+enum Event_category {
+  Learn_Home    @map("Learn@Home")
+  Personnel
+  Coll_ge_Lyc_e @map("Collège/Lycée")
+}

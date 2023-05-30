@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 /** Store */
 import { useSelector, useDispatch } from "react-redux";
-import { userLogout } from "../store/userSlice";
+import { logout } from "../store/authSlice.js";
 
 /** PropTypes */
 import PropTypes from "prop-types";
@@ -25,9 +25,8 @@ export default function Header({ shadow }) {
 
   let isAuth = useSelector((state) => state.auth.isAuth);
 
-  function logout(e) {
-    e.preventDefault();
-    dispatch(userLogout());
+  function handleLogout() {
+    dispatch(logout());
     navigate("/");
   }
 
@@ -43,7 +42,7 @@ export default function Header({ shadow }) {
         </Link>
       )}
       {isAuth === true ? (
-        <div id="logout-button" onClick={logout}>
+        <div id="logout-button" onClick={handleLogout}>
           <span>Se déconnecter</span>
           <FaPowerOff />
         </div>

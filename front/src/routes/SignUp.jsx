@@ -5,15 +5,14 @@ import "../main.scss";
 import { useState } from "react";
 
 /** React Router */
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 /** Components */
 import Header from "../components/Header";
 import LinkLogin from "../components/LinkLogin";
 
 /** Store */
-import { useDispatch } from "react-redux";
-// import { userLogin } from "../store/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { signup } from "../store/authSlice.js";
 
 /** Assets */
@@ -32,7 +31,6 @@ import FormValidatorHelpers from "../helpers/FormValidatorHelpers";
  */
 export default function SignUp() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -47,6 +45,8 @@ export default function SignUp() {
   const [minimumLength, setMinimumLength] = useState(false);
   const [passwordFormat, setPasswordFormat] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+
+  const isAuth = useSelector((state) => state.auth.isAuth);
 
   /**
    * On change in the name input, checks if the user input is correct and stores it or displays a message if not.
@@ -203,7 +203,6 @@ export default function SignUp() {
    */
   function handleSignup(e) {
     e.preventDefault();
-
     if (
       !nameErrorMessage &&
       !emailErrorMessage &&
@@ -216,14 +215,13 @@ export default function SignUp() {
         password,
         role,
       };
-
       dispatch(signup(credentials));
-      navigate("/profile");
     }
   }
 
   return (
     <>
+      {isAuth && <Navigate to="/" replace={true} />}
       <Header shadow={false} />
 
       <div className="login-form-wrapper">

@@ -5,40 +5,91 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import AuthService from "../services/AuthService";
 
 const initialState = {
-  token: null || localStorage.getItem("token"),
-  isAuth: false,
+  token: null || localStorage.getItem("Learn@Home_token"),
+  isAuth: !!localStorage.getItem("Learn@Home_token"),
+  isLoading: false,
+  error: null,
 };
 
 export const signup = createAsyncThunk(
-  "auth/login",
-  async ({ name, email, password, role }) => {
-    const res = await AuthService.signup({ name, email, password, role });
-    return res.data;
+  "auth/signupTutor",
+  async (credentials, thunkAPI) => {
+    try {
+      const res = await AuthService.signup(credentials);
+      if (res.status >= 200 && res.status <= 209) {
+        return res.data;
+      } else {
+        return thunkAPI.rejectWithValue(res.errorr);
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
 );
 
 export const login = createAsyncThunk(
   "auth/login",
-  async ({ email, password }) => {
-    const res = await AuthService.login({ email, password });
-    return res.data;
+  async (credentials, thunkAPI) => {
+    try {
+      const res = await AuthService.login(credentials);
+      if (res.status >= 200 && res.status <= 209) {
+        return res.data;
+      } else {
+        return thunkAPI.rejectWithValue(res.errorr);
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
 );
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  // extraReducers: {
-  //   [login.fulfilled]: (state, action) => {
-  //     return [...action.payload];
-  //   },
-  // },
+  reducers: {
+    logout: (state) => {
+      localStorage.removeItem("Learn@Home_token");
+      state.token = null;
+      state.isAuth = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
-    builder.addCase(login, (state, action) => {
-      state.entities.push(action.payload);
-    });
+    builder
+
+      .addCase(login.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.token = action.payload.access_token;
+        localStorage.setItem("Learn@Home_token", state.token);
+        state.isAuth = true;
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(signup.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(signup.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        console.log(action.payload);
+        state.token = action.payload.access_token;
+        localStorage.setItem("Learn@Home_token", state.token);
+        state.isAuth = true;
+      })
+      .addCase(signup.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
   },
 });
 
-const { reducer } = authSlice;
-export default reducer;
+export const { logout } = authSlice.actions;
+export default authSlice.reducer;
