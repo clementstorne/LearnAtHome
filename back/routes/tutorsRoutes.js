@@ -4,6 +4,6 @@ import verifyTokenMiddleware from "../middlewares/verifyToken.js";
 
 const router = express.Router();
 
-router.get("/", TutorController.getAllTutors);
+router.get("/", verifyTokenMiddleware, TutorController.getAllTutors);
 
 export default router;

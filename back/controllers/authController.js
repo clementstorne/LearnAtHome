@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-// import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
@@ -42,6 +42,8 @@ const AuthController = {
         });
       }
 
+      const hash = bcrypt.hashSync(password, 10);
+
       let newUser;
 
       if (role === "tutor") {
@@ -49,7 +51,7 @@ const AuthController = {
           data: {
             name,
             email,
-            password,
+            password: hash,
             role,
           },
         });
@@ -58,7 +60,7 @@ const AuthController = {
           data: {
             name,
             email,
-            password,
+            password: hash,
             role,
           },
         });
@@ -114,8 +116,7 @@ const AuthController = {
         });
       }
 
-      const passwordMatch = password === user.password;
-      // const passwordMatch = await bcrypt.compare(password, tutor.password);
+      const passwordMatch = await bcrypt.compareSync(password, user.password);
       if (!passwordMatch) {
         return res.status(400).json({
           error:
