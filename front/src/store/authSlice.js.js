@@ -12,7 +12,7 @@ const initialState = {
 };
 
 export const signup = createAsyncThunk(
-  "auth/signupTutor",
+  "auth/signup",
   async (credentials, thunkAPI) => {
     try {
       const res = await AuthService.signup(credentials);
@@ -56,7 +56,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-
       .addCase(login.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -79,7 +78,6 @@ const authSlice = createSlice({
       .addCase(signup.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        console.log(action.payload);
         state.token = action.payload.access_token;
         localStorage.setItem("Learn@Home_token", state.token);
         state.isAuth = true;

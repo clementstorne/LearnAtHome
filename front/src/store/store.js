@@ -3,7 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 
 /** Slices */
 import authReducer from "./authSlice.js.js";
-import { userReducer } from "./userSlice.js";
+import userReducer from "./userSlice.js";
 
 const reducer = {
   auth: authReducer,

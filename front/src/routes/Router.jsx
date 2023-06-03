@@ -7,6 +7,7 @@ import Chat from "./Chat";
 import Dashboard from "./Dashboard";
 import ForgetPassword from "./ForgetPassword";
 import Login from "./Login";
+import Profile from "./Profile";
 import SignUp from "./SignUp";
 import ToDoList from "./ToDoList";
 
@@ -56,14 +57,14 @@ export default function Router() {
             </AuthGuard>
           }
         />
-        {/* <Route
+        <Route
           path="/profile"
           element={
             <AuthGuard>
-              <User />
+              <Profile />
             </AuthGuard>
           }
-        /> */}
+        />
       </Routes>
     </BrowserRouter>
   );

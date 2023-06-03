@@ -2,7 +2,8 @@
 import "../main.scss";
 
 /** Components */
-// import Navbar from "../components/Navbar";
+import Header from "../components/Header";
+import Navbar from "../components/Navbar";
 
 /** Assets */
 
@@ -13,7 +14,9 @@ import "../main.scss";
 export default function Chat() {
   return (
     <>
-      <h1>Hello World</h1>
+      <Header />
+      <Navbar />
+      <h1>Messagerie</h1>
     </>
   );
 }

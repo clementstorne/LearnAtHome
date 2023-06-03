@@ -7,7 +7,13 @@ import { Link } from "react-router-dom";
 /** Store */
 
 /** Assets */
-import { BsChatText, BsCalendar4Week, BsListTask } from "react-icons/bs";
+import {
+  BsHouse,
+  BsChatText,
+  BsCalendar4Week,
+  BsListTask,
+  BsFillPersonFill,
+} from "react-icons/bs";
 
 /**
  * Component for showing the navbar.
@@ -18,6 +24,16 @@ export default function Navbar() {
     <nav className="navbar">
       <ul className="navbar-nav">
         <li className="navbar-link">
+          <Link to={`/`}>
+            <BsHouse />
+          </Link>
+        </li>
+        <li className="navbar-link navbar-separator">
+          <Link to={`/profile`}>
+            <BsFillPersonFill />
+          </Link>
+        </li>
+        <li className="navbar-link navbar-separator">
           <Link to={`/chat`}>
             <BsChatText />
           </Link>

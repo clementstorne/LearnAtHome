@@ -1,53 +1,80 @@
-import { createSlice } from "@reduxjs/toolkit";
+/** Store */
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const userState = {
-  email: null,
-  name: null,
+/** Services */
+import UserService from "../services/UserService";
+
+const initialState = {
   id: null,
-  role: "student",
-  lastConnection: null,
+  name: null,
+  email: null,
+  profilePicture: null,
+  isLoading: false,
+  error: null,
 };
+
+export const getData = createAsyncThunk("user/getData", async (thunkAPI) => {
+  try {
+    const res = await UserService.getUserData();
+    if (res.status >= 200 && res.status <= 209) {
+      return res.data;
+    } else {
+      return thunkAPI.rejectWithValue(res.errorr);
+    }
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
+
+export const updateProfile = createAsyncThunk(
+  "user/update",
+  async (thunkAPI) => {
+    try {
+      const res = await UserService.getUserData();
+      if (res.status >= 200 && res.status <= 209) {
+        return res.data;
+      } else {
+        return thunkAPI.rejectWithValue(res.errorr);
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
 
 const userSlice = createSlice({
   name: "user",
-  initialState: userState,
-  reducers: {
-    /**
-     * Saves user's data in the store when they log in.
-     */
-    userLogin: (state, action) => {
-      (state.email = action.payload.body.email),
-        (state.firstName = action.payload.body.firstName),
-        (state.lastName = action.payload.body.lastName),
-        (state.id = action.payload.body.id);
-    },
-    /**
-     * Toggle when the user wants to update their firstname and/or lastname.
-     */
-    userToUpdateToggle: (state) => {
-      state.toUpdate = !state.toUpdate;
-    },
-    /**
-     * Updates user's data in the store.
-     */
-    userUpdate: (state, action) => {
-      (state.firstName = action.payload.body.firstName),
-        (state.lastName = action.payload.body.lastName),
-        (state.toUpdate = false);
-    },
-    /**
-     * Clears the store when user logs out.
-     */
-    userLogout: (state) => {
-      (state.email = null),
-        (state.firstName = null),
-        (state.lastName = null),
-        (state.id = null);
-    },
+  initialState,
+  extraReducers: (builder) => {
+    builder
+      .addCase(getData.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getData.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        console.log(action.payload);
+      })
+      .addCase(getData.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateProfile.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        console.log(action.payload);
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
   },
 });
 
-export const { userLogin, userToUpdateToggle, userUpdate, userLogout } =
-  userSlice.actions;
-
-export const userReducer = userSlice.reducer;
+// export const { logout } = authSlice.actions;
+export default userSlice.reducer;
