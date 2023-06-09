@@ -5,8 +5,11 @@ import "../main.scss";
 import PropTypes from "prop-types";
 
 /**
- * Component for showing the profile picture of .
+ * A button component.
  * @component
+ * @param   {string}      text  - The text to display on the button.
+ * @param   {boolean}     alert - Specifies whether the button has an alert style.
+ * @returns {JSX.Element}       - The rendered Button component.
  */
 export default function Button({ text, alert }) {
   return (

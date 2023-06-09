@@ -1,0 +1,11 @@
+.dashboard {
+  &-wrapper {
+    @include auto-min-height-with-navbar;
+    padding: 30px 20px;
+    text-align: center;
+
+    @include md {
+      padding: 30px 70px 0 180px;
+    }
+  }
+}

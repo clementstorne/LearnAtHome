@@ -2,149 +2,165 @@
 import "../main.scss";
 
 /** React */
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 /** Components */
-import Header from "../components/Header";
-import Navbar from "../components/Navbar";
-import Button from "../components/Button";
-import ProfilePicture from "../components/ProfilePicture";
+import {
+  Header,
+  Navbar,
+  Button,
+  ProfileField,
+  PasswordField,
+  ProfilePicture,
+} from "../components/index";
 
 /** Store */
 import { useSelector, useDispatch } from "react-redux";
-import { updateProfile } from "../store/userSlice.js";
+import { getData, updateProfile } from "../store/userSlice.js";
 
 /** Assets */
-import {
-  BsFillCheckCircleFill,
-  BsFillXCircleFill,
-  BsExclamationTriangleFill,
-} from "react-icons/bs";
+import defaultProfilePicture from "../assets/default-profile-picture.png";
 
 /** Helpers */
 import FormValidatorHelpers from "../helpers/FormValidatorHelpers";
 
 /**
- * Component for showing the profile page.
+ * User profile page component.
  * @component
+ * @returns {JSX.Element} - The user profile page component.
  */
 export default function Profile() {
   const dispatch = useDispatch();
 
-  const [name, setName] = useState(useSelector((state) => state.user.name));
-  const [email, setEmail] = useState(useSelector((state) => state.user.email));
+  useEffect(() => {
+    dispatch(getData());
+  }, []);
+
+  const nameInStore = useSelector((state) => state.user.name);
+  const emailInStore = useSelector((state) => state.user.email);
+  const imageInStore = useSelector((state) => state.user.profilePicture);
+
+  const [imageBase64url, setImageBase64url] = useState("");
+  // const [defautlImageUrl, setDefautlImageUrl] = useState(defaultProfilePicture);
+  const [imageFile, setImageFile] = useState(null);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [nameErrorMessage, setNameErrorMessage] = useState("");
-  const [emailErrorMessage, setEmailErrorMessage] = useState("");
-  const [oneUpperCaseLetter, setOneUpperCaseLetter] = useState(false);
-  const [oneLowerCaseLetter, setOneLowerCaseLetter] = useState(false);
-  const [oneNumber, setOneNumber] = useState(false);
-  const [oneSpecialCharacter, setOneSpecialCharacter] = useState(false);
-  const [minimumLength, setMinimumLength] = useState(false);
-  const [passwordFormat, setPasswordFormat] = useState(false);
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [passwordConstraints, setPasswordConstraints] = useState({
+    oneUpperCaseLetter: false,
+    oneLowerCaseLetter: false,
+    oneNumber: false,
+    oneSpecialCharacter: false,
+    minimumLength: false,
+  });
 
   const hiddenFileInput = useRef(null);
 
   /**
-   * On change in the name input, checks if the user input is correct and stores it or displays a message if not.
+   * Handles the input change event for an image input field.
+   * Sets the image file and generates a base64 URL for the selected image.
+   * @param   {Event} e - The input change event.
+   * @returns {void}
+   */
+  function handleImageInput(e) {
+    setImageFile(e.target.files[0]);
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(e.target.files[0]);
+    fileReader.addEventListener("load", () => {
+      setImageBase64url(fileReader.result);
+    });
+  }
+
+  /**
+   * Checks if an input value is correct or not and returns an error message if necessary.
+   * @param   {String} fieldName Rule to check if the input is correct or not.
+   * @param   {String} value     Input to check.
+   * @returns {String}           Error message
+   */
+  function validateField(fieldName, value) {
+    let errorMessage = "";
+
+    switch (fieldName) {
+      case "name":
+        if (value.trim() === "") {
+          errorMessage = "Veuillez saisir votre nom";
+        } else if (!FormValidatorHelpers.isNameValid(value)) {
+          errorMessage = "Le format du nom est incorrect";
+        }
+        break;
+      case "email":
+        if (value.trim() === "") {
+          errorMessage = "Veuillez saisir votre email";
+        } else if (!FormValidatorHelpers.isEmailValid(value)) {
+          errorMessage = "Le format de l'email est incorrect";
+        }
+        break;
+      case "password":
+        if (value.trim() === "") {
+          errorMessage = "Veuillez saisir votre mot de passe";
+        } else if (!FormValidatorHelpers.isPasswordValid(value)) {
+          errorMessage = "Le format du mot de passe est incorrect";
+        }
+        break;
+      default:
+        break;
+    }
+
+    return errorMessage;
+  }
+
+  /**
+   * On change in the name input, checks if the user's input is correct and displays a message if not.
    * @param {Event} e
    */
   function handleNameChange(e) {
-    e.preventDefault();
-
-    setName(e.target.value);
-    if (e.target.value.length >= 1) {
-      if (!FormValidatorHelpers.isNameValid(e.target.value)) {
-        e.target.setAttribute("aria-invalid", "true");
-        setNameErrorMessage("Le format du nom est incorrect");
-      } else {
-        e.target.removeAttribute("aria-invalid");
-        setNameErrorMessage("");
-      }
+    const { value } = e.target;
+    setName(value);
+    const errorMessage = validateField("name", value);
+    setErrors((prevErrors) => ({ ...prevErrors, name: errorMessage }));
+    if (errorMessage) {
+      e.target.setAttribute("aria-invalid", "true");
     } else {
-      setNameErrorMessage("Veuillez saisir votre nom");
+      e.target.removeAttribute("aria-invalid");
     }
   }
 
   /**
-   * On change in the email input, checks if the user input is correct and stores it or displays a message if not.
+   * On change in the email input, checks if the user's input is correct and displays a message if not.
    * @param {Event} e
    */
   function handleEmailChange(e) {
-    e.preventDefault();
-
-    setEmail(e.target.value);
-    if (e.target.value.length >= 1) {
-      if (!FormValidatorHelpers.isEmailValid(e.target.value)) {
-        e.target.setAttribute("aria-invalid", "true");
-        setEmailErrorMessage("Le format de l'email est incorrect");
-      } else {
-        e.target.removeAttribute("aria-invalid");
-        setEmailErrorMessage("");
-      }
+    const { value } = e.target;
+    setEmail(value);
+    const errorMessage = validateField("email", value);
+    setErrors((prevErrors) => ({ ...prevErrors, email: errorMessage }));
+    if (errorMessage) {
+      e.target.setAttribute("aria-invalid", "true");
     } else {
-      setEmailErrorMessage("Veuillez saisir votre email");
+      e.target.removeAttribute("aria-invalid");
     }
   }
 
   /**
-   * Displays if a string contains one upper case letter or not.
-   * @param   {String}  str  String to test
+   * Checks if the password matches all constraints.
+   * @param {String} str Password to test
    */
-  function checkOneUpperCaseLetter(str) {
-    if (FormValidatorHelpers.containsOneUpperCaseLetter(str)) {
-      setOneUpperCaseLetter(true);
-    } else {
-      setOneUpperCaseLetter(false);
-    }
-  }
-
-  /**
-   * Displays if a string contains one lower case letter or not.
-   * @param   {String}  str  String to test
-   */
-  function checkOneLowerCaseLetter(str) {
-    if (FormValidatorHelpers.containsOneLowerCaseLetter(str)) {
-      setOneLowerCaseLetter(true);
-    } else {
-      setOneLowerCaseLetter(false);
-    }
-  }
-
-  /**
-   * Displays if a string contains one lower case letter or not.
-   * @param   {String}  str  String to test
-   */
-  function checkOneNumber(str) {
-    if (FormValidatorHelpers.containsOneNumber(str)) {
-      setOneNumber(true);
-    } else {
-      setOneNumber(false);
-    }
-  }
-
-  /**
-   * Displays if a string contains one lower case letter or not.
-   * @param   {String}  str  String to test
-   */
-  function checkOneSpecialCharacter(str) {
-    if (FormValidatorHelpers.containsOneSpecialCharacter(str)) {
-      setOneSpecialCharacter(true);
-    } else {
-      setOneSpecialCharacter(false);
-    }
-  }
-
-  /**
-   * Displays if a string contains one lower case letter or not.
-   * @param   {String}  str  String to test
-   */
-  function checkMinimumLength(str) {
-    if (FormValidatorHelpers.minimumLength(str)) {
-      setMinimumLength(true);
-    } else {
-      setMinimumLength(false);
-    }
+  function checkConstraints(str) {
+    const constraints = {
+      oneUpperCaseLetter: FormValidatorHelpers.containsOneUpperCaseLetter(str),
+      oneLowerCaseLetter: FormValidatorHelpers.containsOneLowerCaseLetter(str),
+      oneNumber: FormValidatorHelpers.containsOneNumber(str),
+      oneSpecialCharacter:
+        FormValidatorHelpers.containsOneSpecialCharacter(str),
+      minimumLength: FormValidatorHelpers.minimumLength(str),
+    };
+    setPasswordConstraints(constraints);
   }
 
   /**
@@ -152,45 +168,41 @@ export default function Profile() {
    * @param {Event} e
    */
   function handlePasswordChange(e) {
-    e.preventDefault();
-
-    setPassword(e.target.value);
-    if (e.target.value.length > 0) {
-      checkOneUpperCaseLetter(e.target.value);
-      checkOneLowerCaseLetter(e.target.value);
-      checkOneNumber(e.target.value);
-      checkOneSpecialCharacter(e.target.value);
-      checkMinimumLength(e.target.value);
-      if (!FormValidatorHelpers.isPasswordValid(e.target.value)) {
-        e.target.setAttribute("aria-invalid", "true");
-        setPasswordFormat(true);
-      } else {
-        e.target.removeAttribute("aria-invalid");
-        setPasswordFormat(false);
-      }
+    const { value } = e.target;
+    setPassword(value);
+    checkConstraints(value);
+    const errorMessage = validateField("password", value);
+    setErrors((prevErrors) => ({ ...prevErrors, password: errorMessage }));
+    if (errorMessage) {
+      e.target.setAttribute("aria-invalid", "true");
     } else {
-      setOneUpperCaseLetter(false);
-      setOneLowerCaseLetter(false);
-      setOneNumber(false);
-      setOneSpecialCharacter(false);
-      setMinimumLength(false);
+      e.target.removeAttribute("aria-invalid");
     }
   }
 
   /**
-   * Checks if all fields are valid, submit form.
+   * Checks if all fields are valid and then submits form.
    * @param {Event} e
    * @returns
    */
   function handleUpdateProfile(e) {
     e.preventDefault();
-    if (!nameErrorMessage && !emailErrorMessage && !passwordFormat) {
-      const credentials = {
-        name,
-        email,
-        password,
-      };
-      dispatch(updateProfile(credentials));
+    if (!errors.name && !errors.email && !errors.password) {
+      const formData = new FormData();
+      if (imageFile) {
+        formData.append("image", imageFile);
+      }
+      if (name) {
+        formData.append("name", name);
+      }
+      if (email) {
+        formData.append("email", email);
+      }
+      if (password) {
+        formData.append("password", password);
+      }
+      console.log(formData);
+      dispatch(updateProfile(formData));
     }
   }
 
@@ -203,7 +215,15 @@ export default function Profile() {
       <Header />
       <div className="profile-wrapper">
         <div className="profile-picture-wrapper">
-          <ProfilePicture source="https://api-private.atlassian.com/users/1eaf71ee9e908c83ae2d4fece3f55e77/avatar" />
+          <ProfilePicture
+            source={
+              imageBase64url
+                ? imageBase64url
+                : imageInStore
+                ? imageInStore
+                : defaultProfilePicture
+            }
+          />
           <div className="profile-picture-button-wrapper">
             <input
               type="file"
@@ -213,6 +233,7 @@ export default function Profile() {
               accept="image/png, image/jpg, image/jpeg"
               className="profile-picture-button-input"
               ref={hiddenFileInput}
+              onChange={handleImageInput}
             />
             <button
               className="button profile-picture-button"
@@ -226,200 +247,30 @@ export default function Profile() {
         </div>
         <div className="profile-form-wrapper">
           <form id="profile-form" action="" onSubmit={handleUpdateProfile}>
-            <div className="profile-field">
-              <label htmlFor="name" id="name-label" className="profile-label">
-                <span
-                  className={`profile-field-error-logo ${
-                    !nameErrorMessage ? "hidden" : ""
-                  }`}
-                  aria-hidden={`${!nameErrorMessage ? "true" : "false"}`}
-                >
-                  <BsExclamationTriangleFill />
-                </span>{" "}
-                Nom complet
-              </label>
-              <input
-                type="text"
-                autoComplete="name"
-                id="name"
-                aria-describedby="name-label"
-                required
-                aria-required="true"
-                spellCheck="false"
-                className="profile-input"
-                onChange={handleNameChange}
-              />
-              <div className="profile-field-error">{nameErrorMessage}</div>
-            </div>
-            <div className="profile-field">
-              <label htmlFor="email" id="email-label" className="profile-label">
-                <span
-                  className={`profile-field-error-logo ${
-                    !emailErrorMessage ? "hidden" : ""
-                  }`}
-                  aria-hidden={`${!emailErrorMessage ? "true" : "false"}`}
-                >
-                  <BsExclamationTriangleFill />
-                </span>{" "}
-                Email
-              </label>
-              <input
-                type="email"
-                autoComplete="email"
-                id="email"
-                aria-describedby="email-label"
-                required
-                aria-required="true"
-                spellCheck="false"
-                className="profile-input"
-                onChange={handleEmailChange}
-              />
-              <div className="profile-field-error">{emailErrorMessage}</div>
-            </div>
-            <div className="profile-field">
-              <label
-                htmlFor="password"
-                id="password-label"
-                className="profile-label"
-              >
-                <span
-                  className={`profile-field-error-logo ${
-                    !passwordFormat ? "hidden" : ""
-                  }`}
-                  aria-hidden={`${!passwordFormat ? "true" : "false"}`}
-                >
-                  <BsExclamationTriangleFill />
-                </span>{" "}
-                Mot de passe
-              </label>
-              <input
-                type="password"
-                autoComplete="new-password"
-                id="password"
-                aria-describedby="email-label"
-                required
-                aria-required="true"
-                spellCheck="false"
-                className="profile-input"
-                onChange={handlePasswordChange}
-              />
-              <div className="profile-field-constraint-wrapper">
-                <span
-                  className={`profile-field-constraint ${
-                    oneUpperCaseLetter
-                      ? "profile-field-constraint-fulfilled"
-                      : ""
-                  }`}
-                  aria-label={
-                    !oneUpperCaseLetter
-                      ? "Le mot de passe doit contenir une majuscule"
-                      : ""
-                  }
-                >
-                  <span
-                    className="profile-field-constraint-logo"
-                    aria-hidden="true"
-                  >
-                    {oneUpperCaseLetter ? (
-                      <BsFillCheckCircleFill />
-                    ) : (
-                      <BsFillXCircleFill />
-                    )}
-                  </span>{" "}
-                  une majuscule
-                </span>
-                <span
-                  className={`profile-field-constraint ${
-                    oneLowerCaseLetter
-                      ? "profile-field-constraint-fulfilled"
-                      : ""
-                  }`}
-                  aria-label={
-                    !oneLowerCaseLetter
-                      ? "Le mot de passe doit contenir une minuscule"
-                      : ""
-                  }
-                >
-                  <span
-                    className="profile-field-constraint-logo"
-                    aria-hidden="true"
-                  >
-                    {oneLowerCaseLetter ? (
-                      <BsFillCheckCircleFill />
-                    ) : (
-                      <BsFillXCircleFill />
-                    )}
-                  </span>{" "}
-                  une minuscule
-                </span>
-                <span
-                  className={`profile-field-constraint ${
-                    oneNumber ? "profile-field-constraint-fulfilled" : ""
-                  }`}
-                  aria-label={
-                    !oneNumber ? "Le mot de passe doit contenir un chiffre" : ""
-                  }
-                >
-                  <span
-                    className="profile-field-constraint-logo"
-                    aria-hidden="true"
-                  >
-                    {oneNumber ? (
-                      <BsFillCheckCircleFill />
-                    ) : (
-                      <BsFillXCircleFill />
-                    )}
-                  </span>{" "}
-                  un chiffre
-                </span>
-                <span
-                  className={`profile-field-constraint ${
-                    oneSpecialCharacter
-                      ? "profile-field-constraint-fulfilled"
-                      : ""
-                  }`}
-                  aria-label={
-                    !oneSpecialCharacter
-                      ? "Le mot de passe doit contenir un caractère spécial"
-                      : ""
-                  }
-                >
-                  <span
-                    className="profile-field-constraint-logo"
-                    aria-hidden="true"
-                  >
-                    {oneSpecialCharacter ? (
-                      <BsFillCheckCircleFill />
-                    ) : (
-                      <BsFillXCircleFill />
-                    )}
-                  </span>{" "}
-                  un caractère spécial
-                </span>
-                <span
-                  className={`profile-field-constraint ${
-                    minimumLength ? "profile-field-constraint-fulfilled" : ""
-                  }`}
-                  aria-label={
-                    !minimumLength
-                      ? "Le mot de passe doit contenir un caractère spécial"
-                      : ""
-                  }
-                >
-                  <span
-                    className="profile-field-constraint-logo"
-                    aria-hidden="true"
-                  >
-                    {minimumLength ? (
-                      <BsFillCheckCircleFill />
-                    ) : (
-                      <BsFillXCircleFill />
-                    )}
-                  </span>{" "}
-                  8 caractères minimum
-                </span>
-              </div>
-            </div>
+            <ProfileField
+              className="profile"
+              id="name"
+              label="Nom complet"
+              errorMessage={errors.name}
+              value={name ? name : nameInStore}
+              event={handleNameChange}
+            />
+            <ProfileField
+              className="profile"
+              id="email"
+              label="Email"
+              errorMessage={errors.email}
+              value={email ? email : emailInStore}
+              event={handleEmailChange}
+            />
+            <PasswordField
+              className="profile"
+              id="password"
+              label="Mot de passe"
+              errorMessage={errors.password}
+              event={handlePasswordChange}
+              constraints={passwordConstraints}
+            />
             <input
               type="submit"
               className="button profile-button"

@@ -2,21 +2,23 @@
 import "../main.scss";
 
 /** Components */
-import Header from "../components/Header";
-import Navbar from "../components/Navbar";
+import { Header, Navbar } from "../components/index";
 
 /** Assets */
 
 /**
- * Component for showing the chat page.
+ * Chat page component.
  * @component
+ * @returns {JSX.Element} - The chat page component.
  */
 export default function Chat() {
   return (
     <>
       <Header />
+      <div className="chat-wrapper">
+        <h1>Messagerie</h1>
+      </div>
       <Navbar />
-      <h1>Messagerie</h1>
     </>
   );
 }

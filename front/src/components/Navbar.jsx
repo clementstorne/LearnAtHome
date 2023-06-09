@@ -4,8 +4,6 @@ import "../main.scss";
 /** React Router */
 import { Link } from "react-router-dom";
 
-/** Store */
-
 /** Assets */
 import {
   BsHouse,
@@ -16,8 +14,8 @@ import {
 } from "react-icons/bs";
 
 /**
- * Component for showing the navbar.
- * @component
+ * The navigation bar component.
+ * @returns {JSX.Element} The rendered JSX element representing the navigation bar.
  */
 export default function Navbar() {
   return (

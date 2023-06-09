@@ -8,67 +8,82 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 /** Components */
-import Header from "../components/Header";
-import LinkLogin from "../components/LinkLogin";
-import LinkSignup from "../components/LinkSignup";
-
-/** Store */
-// import { useDispatch } from "react-redux";
-// import { userLogin } from "../store/userSlice";
-
-/** Assets */
-import { BsExclamationTriangleFill } from "react-icons/bs";
+import {
+  Header,
+  LinkLogin,
+  LinkSignup,
+  ProfileField,
+} from "../components/index";
 
 /** Helpers */
 import FormValidatorHelpers from "../helpers/FormValidatorHelpers";
 
 /**
- * Component for showing the login page.
+ * Forget password page component.
  * @component
+ * @returns {JSX.Element} - The forget password page component.
  */
 export default function ForgetPassword() {
-  // const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
-  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [errors, setErrors] = useState({
+    email: "",
+  });
 
   /**
-   * On change in the email input, checks if the user input is correct and stores it or displays a message if not.
-   * @param {Event} e
+   * Validates a specific field value based on the field name.
+   * @param   {string} fieldName - The name of the field to validate.
+   * @param   {string} value     - The value of the field to validate.
+   * @returns {string}           - The error message, if any.
+   */
+  function validateField(fieldName, value) {
+    let errorMessage = "";
+
+    switch (fieldName) {
+      case "email":
+        if (value.trim() === "") {
+          errorMessage = "Veuillez saisir votre email";
+        } else if (!FormValidatorHelpers.isEmailValid(value)) {
+          errorMessage = "Le format de l'email est incorrect";
+        }
+        break;
+      default:
+        break;
+    }
+
+    return errorMessage;
+  }
+
+  /**
+   * On change in the email input, checks if the value is correct and displays a message if not.
+   * @param {Object} e - The event object representing the change event.
    */
   function handleEmailChange(e) {
-    e.preventDefault();
-
-    setEmail(e.target.value);
-    if (e.target.value.length >= 1) {
-      if (!FormValidatorHelpers.isEmailValid(e.target.value)) {
-        e.target.setAttribute("aria-invalid", "true");
-        setEmailErrorMessage("Le format de l'email est incorrect");
-      } else {
-        e.target.removeAttribute("aria-invalid");
-        setEmailErrorMessage("");
-      }
+    const { value } = e.target;
+    setEmail(value);
+    const errorMessage = validateField("email", value);
+    setErrors((prevErrors) => ({ ...prevErrors, email: errorMessage }));
+    if (errorMessage) {
+      e.target.setAttribute("aria-invalid", "true");
     } else {
-      setEmailErrorMessage("Veuillez saisir votre email");
+      e.target.removeAttribute("aria-invalid");
     }
   }
 
   /**
-   * Checks if the email is valid, submit form et navigate to login page.
-   * @param {Event} e
-   * @returns
+   * Handles the forget password process.
+   * @async
+   * @param   {Event}         e - The event object representing the form submission.
+   * @returns {Promise<void>}
    */
-  function handleForgetPassword(e) {
+  async function handleForgetPassword(e) {
     e.preventDefault();
-
-    if (!emailErrorMessage) {
+    if (!errors.email) {
       const credentials = {
         email,
       };
-
       console.log(credentials);
-      // dispatch(login(credentials));
       navigate("/login");
     }
   }
@@ -79,32 +94,21 @@ export default function ForgetPassword() {
 
       <div className="login-form-wrapper">
         <form id="login-form" action="" onSubmit={handleForgetPassword}>
-          <div className="login-field">
-            <label htmlFor="email" id="email-label" className="login-label">
-              <span
-                className={`login-field-error-logo ${
-                  !emailErrorMessage ? "hidden" : ""
-                }`}
-                aria-hidden={`${!emailErrorMessage ? "true" : "false"}`}
-              >
-                <BsExclamationTriangleFill />
-              </span>{" "}
-              Email
-            </label>
-            <input
-              type="email"
-              autoComplete="email"
-              id="email"
-              aria-describedby="email-label"
-              required
-              aria-required="true"
-              spellCheck="false"
-              className="login-input"
-              onChange={handleEmailChange}
-            />
-            <div className="login-field-error">{emailErrorMessage}</div>
-          </div>
-          <input type="submit" className="login-button" value="Réinitialiser" />
+          <ProfileField
+            isRequired={true}
+            className="login"
+            id="email"
+            label="Email"
+            errorMessage={errors.email}
+            value={email}
+            event={handleEmailChange}
+          />
+          <input
+            type="submit"
+            className="login-button"
+            value="Réinitialiser"
+            disabled={errors.email}
+          />
         </form>
 
         <div id="links">

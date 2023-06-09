@@ -2,21 +2,23 @@
 import "../main.scss";
 
 /** Components */
-import Header from "../components/Header";
-import Navbar from "../components/Navbar";
+import { Header, Navbar } from "../components/index";
 
 /** Assets */
 
 /**
- * Component for showing the todo page.
+ * Todo page component.
  * @component
+ * @returns {JSX.Element} - The todo page component.
  */
 export default function ToDoList() {
   return (
     <>
       <Header />
+      <div className="todo-wrapper">
+        <h1>Todo list</h1>
+      </div>
       <Navbar />
-      <h1>Todo list</h1>
     </>
   );
 }

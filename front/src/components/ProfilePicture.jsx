@@ -5,8 +5,9 @@ import "../main.scss";
 import PropTypes from "prop-types";
 
 /**
- * Component for showing the profile picture of .
- * @component
+ * A component for displaying the user's profile picture.
+ * @param   {string}      source - The source URL of the profile picture.
+ * @returns {JSX.Element}        - The rendered ProfilePicture component.
  */
 export default function ProfilePicture({ source }) {
   return (

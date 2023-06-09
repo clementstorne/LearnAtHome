@@ -8,9 +8,10 @@ import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
 /**
- * Component for limiting access to pages when the user is not logged in.
- * @component
- * @param   {HTMLElement}  children  The content to limit the access to.
+ * Component for guarding routes and ensuring authentication.
+ * If the user is not authenticated, it redirects to the login page.
+ * @param   {ReactNode} children - The child components to render if the user is authenticated.
+ * @returns {ReactNode}          - The rendered child components or a redirect to the login page.
  */
 export default function AuthGuard({ children }) {
   const isAuth = useSelector((state) => state.auth.isAuth);

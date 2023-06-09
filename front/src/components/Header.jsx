@@ -16,8 +16,9 @@ import logo from "../assets/Logo.svg";
 import { FaPowerOff } from "react-icons/fa";
 
 /**
- * Component for showing the navbar.
- * @component
+ * Header component that displays the header section of the application.
+ * @param   {boolean}     shadow - Determines whether to show a shadow effect on the header.
+ * @returns {JSX.Element}        - The rendered header component.
  */
 export default function Header({ shadow }) {
   const dispatch = useDispatch();

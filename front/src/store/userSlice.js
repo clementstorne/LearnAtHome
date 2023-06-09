@@ -6,8 +6,8 @@ import UserService from "../services/UserService";
 
 const initialState = {
   id: null,
-  name: null,
-  email: null,
+  name: "",
+  email: "",
   profilePicture: null,
   isLoading: false,
   error: null,
@@ -28,9 +28,9 @@ export const getData = createAsyncThunk("user/getData", async (thunkAPI) => {
 
 export const updateProfile = createAsyncThunk(
   "user/update",
-  async (thunkAPI) => {
+  async (formData, thunkAPI) => {
     try {
-      const res = await UserService.getUserData();
+      const res = await UserService.updateUserProfile(formData);
       if (res.status >= 200 && res.status <= 209) {
         return res.data;
       } else {
@@ -54,7 +54,10 @@ const userSlice = createSlice({
       .addCase(getData.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        console.log(action.payload);
+        state.id = action.payload.data.id;
+        state.name = action.payload.data.name;
+        state.email = action.payload.data.email;
+        state.profilePicture = action.payload.data.imageUrl;
       })
       .addCase(getData.rejected, (state, action) => {
         state.isLoading = false;
@@ -67,7 +70,10 @@ const userSlice = createSlice({
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        console.log(action.payload);
+        state.id = action.payload.user.id;
+        state.name = action.payload.user.name;
+        state.email = action.payload.user.email;
+        state.profilePicture = action.payload.user.imageUrl;
       })
       .addCase(updateProfile.rejected, (state, action) => {
         state.isLoading = false;

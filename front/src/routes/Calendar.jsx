@@ -2,21 +2,23 @@
 import "../main.scss";
 
 /** Components */
-import Header from "../components/Header";
-import Navbar from "../components/Navbar";
+import { Header, Navbar } from "../components/index";
 
 /** Assets */
 
 /**
- * Component for showing the calendar page.
+ * Calendar page component.
  * @component
+ * @returns {JSX.Element} - The calendar page component.
  */
 export default function Calendar() {
   return (
     <>
       <Header />
+      <div className="calendar-wrapper">
+        <h1>Calendrier</h1>
+      </div>
       <Navbar />
-      <h1>Calendrier</h1>
     </>
   );
 }
