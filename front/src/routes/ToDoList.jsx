@@ -2,7 +2,7 @@
 import "../main.scss";
 
 /** Components */
-import { Header, Navbar } from "../components/index";
+import { Header, Navbar, TodoItem } from "../components/index";
 
 /** Assets */
 
@@ -17,6 +17,8 @@ export default function ToDoList() {
       <Header />
       <div className="todo-wrapper">
         <h1>Todo list</h1>
+        <TodoItem text="Faire le DM de maths" />
+        <TodoItem text="Apprendre le vocabulaire" />
       </div>
       <Navbar />
     </>

@@ -9,6 +9,7 @@ import {
   Header,
   Navbar,
   Button,
+  Modal,
   ProfileField,
   PasswordField,
   ProfilePicture,
@@ -192,15 +193,17 @@ export default function Profile() {
       if (imageFile) {
         formData.append("image", imageFile);
       }
+      const user = {};
       if (name) {
-        formData.append("name", name);
+        user.name = name;
       }
       if (email) {
-        formData.append("email", email);
+        user.email = email;
       }
       if (password) {
-        formData.append("password", password);
+        user.password = password;
       }
+      formData.append("user", JSON.stringify(user));
       console.log(formData);
       dispatch(updateProfile(formData));
     }
@@ -213,6 +216,7 @@ export default function Profile() {
   return (
     <>
       <Header />
+      <Modal text="Votre profil a été mis à jour" />
       <div className="profile-wrapper">
         <div className="profile-picture-wrapper">
           <ProfilePicture

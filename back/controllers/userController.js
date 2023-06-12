@@ -53,9 +53,9 @@ const UserController = {
     const userId = req.auth.id;
 
     if (!userId) {
-      return res.status(400).json({
+      return res.status(401).json({
         error:
-          "The server could not process the request because a required parameter is missing. Please include all necessary parameters and try again.",
+          "Access Denied. The requested resource requires authentication. Please provide valid credentials to access this resource.",
       });
     }
 
@@ -88,10 +88,10 @@ const UserController = {
         });
       }
 
-      const credentials = req.body;
+      const credentials = JSON.parse(req.body.user);
 
-      if (req.body.password) {
-        const password = req.body.password;
+      if (credentials.password) {
+        const password = credentials.password;
         const regex = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,})/g;
         if (!regex.test(password)) {
           return res.status(400).json({
@@ -108,27 +108,31 @@ const UserController = {
 
       if (user.imageUrl) {
         const filename = user.imageUrl.split("/images/")[1];
-        fs.unlink(`images/${filename}`, () => {
+        fs.unlink(`images/${filename}`, async () => {
           if (req.file && req.file.filename) {
             credentials.imageUrl = `${req.protocol}://${req.get(
               "host"
             )}/images/${req.file.filename}`;
           }
           if (user.role === "tutor") {
-            updatedUser = prisma.tutor.update({
+            updatedUser = await prisma.tutor.update({
               where: {
                 id: userId,
               },
               data: credentials,
             });
           } else {
-            updatedUser = prisma.student.update({
+            updatedUser = await prisma.student.update({
               where: {
                 id: userId,
               },
               data: credentials,
             });
           }
+          return res.status(200).json({
+            message: "User profile was updated successfully.",
+            updatedUser,
+          });
         });
       } else {
         if (req.file && req.file.filename) {
@@ -137,6 +141,7 @@ const UserController = {
           }`;
         }
         if (user.role === "tutor") {
+          console.log("tutor");
           updatedUser = await prisma.tutor.update({
             where: {
               id: userId,
@@ -151,12 +156,78 @@ const UserController = {
             data: credentials,
           });
         }
+        return res.status(200).json({
+          message: "User profile was updated successfully.",
+          updatedUser,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error:
+          "The server encountered an unexpected condition that prevented it from fulfilling the request. Please try again later or contact the administrator.",
+      });
+    }
+  },
+
+  deleteUser: async (req, res) => {
+    try {
+      const userId = req.auth.id;
+
+      if (!userId) {
+        return res.status(401).json({
+          error:
+            "Access Denied. The requested resource requires authentication. Please provide valid credentials to access this resource.",
+        });
       }
 
-      return res.status(200).json({
-        message: "User profile updated successfully.",
-        updatedUser,
-      });
+      let user =
+        (await prisma.tutor.findUnique({
+          where: { id: userId },
+          select: {
+            id: true,
+            role: true,
+          },
+        })) ||
+        (await prisma.student.findUnique({
+          where: { id: userId },
+          select: {
+            id: true,
+            role: true,
+          },
+        }));
+
+      if (!user) {
+        return res.status(404).json({
+          error: "Not found",
+        });
+      }
+
+      if (user.role === "tutor") {
+        await prisma.tutor.delete({ where: { id: userId } }).then(() => {
+          res.status(204).json({
+            message: "User was deleted successfully.",
+          });
+        });
+      } else {
+        await prisma.student.delete({ where: { id: userId } }).then(() => {
+          res.status(204).json({
+            message: "User was deleted successfully.",
+          });
+        });
+      }
+
+      // const filename = user.imageUrl.split("/images/")[1];
+      // fs.unlink(`images/${filename}`, () => {
+      //   prisma.user
+      //     .delete({ where: { id: userId } })
+      //     .then(() => {
+      //       res.status(200).json({
+      //         message: "User deleted successfully.",
+      //       });
+      //     })
+      //     .catch((error) => res.status(400).json({ error }));
+      // });
     } catch (error) {
       console.error(error);
       res.status(500).json({

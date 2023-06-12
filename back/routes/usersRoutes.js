@@ -12,5 +12,6 @@ router.patch(
   multerMiddleware,
   UserController.updateProfile
 );
+router.delete("/profile", verifyTokenMiddleware, UserController.deleteUser);
 
 export default router;
