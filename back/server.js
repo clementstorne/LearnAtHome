@@ -1,12 +1,12 @@
 import express from "express";
 import cors from "cors";
-// import path from "path";
+import path from "path";
+import { fileURLToPath } from "url";
 
 import { PrismaClient } from "@prisma/client";
 
 import authRoutes from "./routes/authRoutes.js";
 import usersRoutes from "./routes/usersRoutes.js";
-import tutorsRoutes from "./routes/tutorsRoutes.js";
 
 import verifyTokenMiddleware from "./middlewares/verifyToken.js";
 
@@ -26,7 +26,9 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRoutes);
 app.use("/users", usersRoutes);
-app.use("/tutors", tutorsRoutes);
+
+const __dirname = fileURLToPath(import.meta.url);
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
