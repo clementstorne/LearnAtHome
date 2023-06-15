@@ -19,6 +19,7 @@ export default function ToDoList() {
         <h1>Todo list</h1>
         <TodoItem text="Faire le DM de maths" />
         <TodoItem text="Apprendre le vocabulaire" />
+        <TodoItem text="Lire le livre" />
       </div>
       <Navbar />
     </>

@@ -12,12 +12,10 @@ const verifyTokenMiddleware = (req, res, next) => {
   const token =
     req.headers.authorization && extractBearer(req.headers.authorization);
   if (!token) {
-    return res
-      .status(401)
-      .json({
-        message:
-          "Access Denied. The requested resource requires authentication. Please provide valid credentials to access this resource.",
-      });
+    return res.status(401).json({
+      message:
+        "Access Denied. The requested resource requires authentication. Please provide valid credentials to access this resource.",
+    });
   }
   jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
     if (err) {

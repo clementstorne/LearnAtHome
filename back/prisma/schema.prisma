@@ -43,6 +43,7 @@ model Student {
   grade     Grade?      @relation(fields: [gradeName], references: [name], onDelete: Cascade)
   gradeName Grade_name?
   tutors    Tutor[]
+  tasks     Task[]
   // tutors       Tutor[]        @relation("StudentTutor")
   // StudentTutor StudentTutor[]
 
@@ -102,8 +103,12 @@ model Task {
   isDone    Boolean   @default(false)
   createdAt DateTime  @default(now()) @db.DateTime(0)
   updatedAt DateTime? @updatedAt @db.DateTime(0)
-  TutorId   String    @db.Char(36)
-  Tutor     Tutor     @relation(fields: [TutorId], references: [id], onDelete: Cascade)
+  ownerId   String    @db.Char(36)
+  creatorId String    @db.Char(36)
+  TutorId   String?   @db.Char(36)
+  Tutor     Tutor?    @relation(fields: [TutorId], references: [id], onDelete: Cascade)
+  StudentId String?   @db.Char(36)
+  Student   Student?  @relation(fields: [StudentId], references: [id], onDelete: Cascade)
 
   @@index([TutorId], map: "TutorId")
 }

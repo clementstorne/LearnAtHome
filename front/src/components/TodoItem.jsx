@@ -18,17 +18,28 @@ export default function TodoItem({ text }) {
   };
 
   return (
-    <div className="todo-task">
-      <input type="checkbox" checked={isDone} onChange={handleToggle} />
+    <div className="todo-item">
+      <input
+        type="checkbox"
+        id="todo-item-checkbox"
+        className="todo-item-checkbox"
+        checked={isDone}
+        onChange={handleToggle}
+      />
       <div
-        className={`todo-task-icon ${
+        className={`todo-item-icon ${
           isDone ? "color-secondary" : "color-tertiary"
         } `}
-        // onClick={toggleTaskStatus(true)}
       >
         {isDone ? <BsCheckCircle /> : <BsCircle />}
       </div>
-      {text}
+      <label
+        htmlFor="todo-item-checkbox"
+        className="todo-item-label"
+        onClick={handleToggle}
+      >
+        {text}
+      </label>
     </div>
   );
 }

@@ -7,8 +7,9 @@ import { PrismaClient } from "@prisma/client";
 
 import authRoutes from "./routes/authRoutes.js";
 import usersRoutes from "./routes/usersRoutes.js";
+import tasksRoutes from "./routes/tasksRoutes.js";
 
-import verifyTokenMiddleware from "./middlewares/verifyToken.js";
+// import verifyTokenMiddleware from "./middlewares/verifyToken.js";
 
 const app = express();
 const corsOptions = {
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRoutes);
 app.use("/users", usersRoutes);
+app.use("/tasks", tasksRoutes);
 
 const __dirname = fileURLToPath(import.meta.url);
 app.use("/images", express.static(path.join(__dirname, "images")));

@@ -52,13 +52,6 @@ const UserController = {
   updateProfile: async (req, res) => {
     const userId = req.auth.id;
 
-    if (!userId) {
-      return res.status(401).json({
-        error:
-          "Access Denied. The requested resource requires authentication. Please provide valid credentials to access this resource.",
-      });
-    }
-
     try {
       let user =
         (await prisma.tutor.findUnique({
