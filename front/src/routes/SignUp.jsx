@@ -14,11 +14,13 @@ import {
   ProfileField,
   PasswordField,
   PasswordCheckField,
+  Modal,
 } from "../components/index";
 
 /** Store */
 import { useDispatch, useSelector } from "react-redux";
 import { signup } from "../store/authSlice.js";
+import { openModal } from "../store/modalSlice";
 
 /** Helpers */
 import FormValidatorHelpers from "../helpers/FormValidatorHelpers";
@@ -50,6 +52,7 @@ export default function SignUp() {
   });
 
   const isAuth = useSelector((state) => state.auth.isAuth);
+  const requestStatus = useSelector((state) => state.auth.status);
 
   /**
    * Validates a specific field value based on the field name.
@@ -195,6 +198,9 @@ export default function SignUp() {
         role,
       };
       dispatch(signup(credentials));
+      if (requestStatus === "Rejected") {
+        dispatch(openModal("Cet email est déjà utilisé"));
+      }
     }
   }
 
@@ -202,6 +208,8 @@ export default function SignUp() {
     <>
       {isAuth && <Navigate to="/" replace={true} />}
       <Header shadow={false} />
+
+      <Modal />
 
       <div className="login-form-wrapper">
         <form id="login-form" action="" onSubmit={handleSignup}>

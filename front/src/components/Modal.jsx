@@ -1,41 +1,54 @@
 /** Style */
 import "../main.scss";
 
-/** PropTypes */
-import PropTypes from "prop-types";
-
 /** React */
-import { useState } from "react";
+import { useEffect } from "react";
+
+/** Store */
+import { useSelector, useDispatch } from "react-redux";
+import { closeModal } from "../store/modalSlice.js";
 
 /** Assets */
 import { BsXLg } from "react-icons/bs";
 
-export default function Modal({ text }) {
-  const [isHidden, hidModal] = useState(false);
+export default function Modal() {
+  const dispatch = useDispatch();
 
-  function closeModal() {
-    hidModal(true);
+  const isOpen = useSelector((state) => state.modal.isOpen);
+  const message = useSelector((state) => state.modal.message);
+
+  function toggleModal() {
+    dispatch(closeModal());
   }
 
+  function closeOnEscapeKeyDown(e) {
+    if ((e.charCode || e.keyCode) === 27) {
+      dispatch(closeModal());
+    }
+  }
+
+  useEffect(() => {
+    document.body.addEventListener("keydown", closeOnEscapeKeyDown);
+    return function cleanup() {
+      document.body.removeEventListener("keydown", closeOnEscapeKeyDown);
+    };
+  }, []);
+
   return (
-    <div className={`modal-overlay ${isHidden ? "hidden" : ""}`}>
+    <div className={`modal-overlay ${isOpen ? "show" : ""}`}>
       <div
-        className={`modal ${isHidden ? "hidden" : ""}`}
-        aria-hidden={isHidden}
+        className={`modal ${isOpen ? "show" : ""}`}
+        aria-hidden={!isOpen}
         role="dialog"
         aria-describedby="modal-text"
       >
-        <span className="modal-close-button" onClick={closeModal}>
+        <span className="modal-close-button" onClick={toggleModal}>
           <BsXLg />
         </span>
         <span id="modal-text" className="modal-text">
-          {text}
+          {message}
         </span>
       </div>
     </div>
   );
 }
-
-Modal.propTypes = {
-  text: PropTypes.string.isRequired,
-};

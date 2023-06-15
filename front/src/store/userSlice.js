@@ -70,10 +70,9 @@ const userSlice = createSlice({
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        // state.id = action.payload.user.id;
-        // state.name = action.payload.user.name;
-        // state.email = action.payload.user.email;
-        // state.profilePicture = action.payload.user.imageUrl;
+        state.name = action.payload.updatedUser.name;
+        state.email = action.payload.updatedUser.email;
+        state.profilePicture = action.payload.updatedUser.imageUrl;
       })
       .addCase(updateProfile.rejected, (state, action) => {
         state.isLoading = false;

@@ -34,6 +34,7 @@ export default function SimplePasswordField({
         required={isRequired}
         aria-required={isRequired}
         spellCheck="false"
+        minLength={8}
         className={`${className}-input`}
         onChange={event}
       />

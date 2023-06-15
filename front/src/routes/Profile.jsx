@@ -18,6 +18,7 @@ import {
 /** Store */
 import { useSelector, useDispatch } from "react-redux";
 import { getData, updateProfile } from "../store/userSlice.js";
+import { openModal } from "../store/modalSlice.js";
 
 /** Assets */
 import defaultProfilePicture from "../assets/default-profile-picture.png";
@@ -206,6 +207,7 @@ export default function Profile() {
       formData.append("user", JSON.stringify(user));
       console.log(formData);
       dispatch(updateProfile(formData));
+      dispatch(openModal("Votre profil a été mis à jour"));
     }
   }
 
@@ -216,7 +218,7 @@ export default function Profile() {
   return (
     <>
       <Header />
-      <Modal text="Votre profil a été mis à jour" />
+      <Modal />
       <div className="profile-wrapper">
         <div className="profile-picture-wrapper">
           <ProfilePicture

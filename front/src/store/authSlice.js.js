@@ -9,6 +9,7 @@ const initialState = {
   isAuth: !!localStorage.getItem("Learn@Home_token"),
   isLoading: false,
   error: null,
+  status: null,
 };
 
 export const signup = createAsyncThunk(
@@ -58,10 +59,12 @@ const authSlice = createSlice({
     builder
       .addCase(login.pending, (state) => {
         state.isLoading = true;
+        state.status = "Pending";
         state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.status = "Fulfilled";
         state.error = null;
         state.token = action.payload.access_token;
         localStorage.setItem("Learn@Home_token", state.token);
@@ -69,14 +72,17 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
+        state.status = action.error.message;
         state.error = action.payload;
       })
       .addCase(signup.pending, (state) => {
         state.isLoading = true;
+        state.status = "Pending";
         state.error = null;
       })
       .addCase(signup.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.status = "Fulfilled";
         state.error = null;
         state.token = action.payload.access_token;
         localStorage.setItem("Learn@Home_token", state.token);
@@ -84,6 +90,7 @@ const authSlice = createSlice({
       })
       .addCase(signup.rejected, (state, action) => {
         state.isLoading = false;
+        state.status = action.error.message;
         state.error = action.payload;
       });
   },

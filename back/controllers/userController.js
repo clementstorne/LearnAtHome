@@ -120,6 +120,13 @@ const UserController = {
                 id: userId,
               },
               data: credentials,
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                imageUrl: true,
+                role: true,
+              },
             });
           } else {
             updatedUser = await prisma.student.update({
@@ -127,6 +134,13 @@ const UserController = {
                 id: userId,
               },
               data: credentials,
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                imageUrl: true,
+                role: true,
+              },
             });
           }
           return res.status(200).json({
@@ -147,6 +161,13 @@ const UserController = {
               id: userId,
             },
             data: credentials,
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              imageUrl: true,
+              role: true,
+            },
           });
         } else {
           updatedUser = await prisma.student.update({
@@ -154,6 +175,13 @@ const UserController = {
               id: userId,
             },
             data: credentials,
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              imageUrl: true,
+              role: true,
+            },
           });
         }
         return res.status(200).json({

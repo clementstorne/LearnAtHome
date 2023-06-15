@@ -14,11 +14,13 @@ import {
   LinkSignup,
   ProfileField,
   SimplePasswordField,
+  Modal,
 } from "../components/index";
 
 /** Store */
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/authSlice.js";
+import { openModal } from "../store/modalSlice";
 
 /** Helpers */
 import FormValidatorHelpers from "../helpers/FormValidatorHelpers";
@@ -38,6 +40,7 @@ export default function Login() {
   });
 
   const isAuth = useSelector((state) => state.auth.isAuth);
+  const requestStatus = useSelector((state) => state.auth.status);
 
   /**
    * Validates a specific field value based on the field name.
@@ -93,6 +96,9 @@ export default function Login() {
         password,
       };
       dispatch(login(credentials));
+      if (requestStatus === "Rejected") {
+        dispatch(openModal("L'email et/ou le mot de passe sont incorrects"));
+      }
     }
   }
 
@@ -100,6 +106,8 @@ export default function Login() {
     <>
       {isAuth && <Navigate to="/" replace={true} />}
       <Header shadow={false} />
+
+      <Modal />
 
       <div className="login-form-wrapper">
         <form id="login-form" action="" onSubmit={handleLogin}>
