@@ -4,17 +4,18 @@ import "../main.scss";
 /** PropTypes */
 import PropTypes from "prop-types";
 
-/** React */
-import { useState } from "react";
+/** Store */
+import { useDispatch } from "react-redux";
+import { updateTask } from "../store/taskSlice";
 
 /** Assets */
 import { BsCircle, BsCheckCircle } from "react-icons/bs";
 
-export default function TodoItem({ text }) {
-  const [isDone, completeTask] = useState(false);
+export default function TodoItem({ text, status, taskId }) {
+  const dispatch = useDispatch();
 
   const handleToggle = () => {
-    completeTask(!isDone);
+    dispatch(updateTask({ taskId, isDone: !status }));
   };
 
   return (
@@ -23,20 +24,22 @@ export default function TodoItem({ text }) {
         type="checkbox"
         id="todo-item-checkbox"
         className="todo-item-checkbox"
-        checked={isDone}
+        checked={status}
         onChange={handleToggle}
       />
       <div
         className={`todo-item-icon ${
-          isDone ? "color-secondary" : "color-tertiary"
+          status ? "color-secondary" : "color-tertiary"
         } `}
       >
-        {isDone ? <BsCheckCircle /> : <BsCircle />}
+        {status ? <BsCheckCircle /> : <BsCircle />}
       </div>
       <label
         htmlFor="todo-item-checkbox"
-        className="todo-item-label"
-        onClick={handleToggle}
+        className={`todo-item-label ${status ? "todo-item-label-done" : ""}`}
+        onClick={() => {
+          console.log("clic label");
+        }}
       >
         {text}
       </label>
@@ -46,4 +49,6 @@ export default function TodoItem({ text }) {
 
 TodoItem.propTypes = {
   text: PropTypes.string.isRequired,
+  status: PropTypes.bool.isRequired,
+  taskId: PropTypes.string.isRequired,
 };

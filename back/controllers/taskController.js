@@ -53,6 +53,7 @@ const TaskController = {
           creatorId: userId,
         },
         select: {
+          id: true,
           content: true,
           isDone: true,
         },
@@ -75,15 +76,21 @@ const TaskController = {
       });
     }
   },
-  getSingleTask: async (req, res) => {
+  getSingleTask: async (req) => {
     const userId = req.auth.id;
     const taskId = req.params.id;
 
     if (!taskId) {
-      return res.status(400).json({
-        error:
+      return {
+        task: null,
+        status: 400,
+        message:
           "The server could not process the request because a required parameter is missing. Please include all necessary parameters and try again.",
-      });
+      };
+      // res.status(400).json({
+      //   error:
+      //     "The server could not process the request because a required parameter is missing. Please include all necessary parameters and try again.",
+      // });
     }
 
     try {
@@ -99,21 +106,78 @@ const TaskController = {
       });
 
       if (task.creatorId !== userId) {
-        return res.status(403).json({
-          error:
+        return {
+          task: null,
+          status: 403,
+          message:
             "Forbidden. You do not have permission to access the requested resource. This resource belongs to another user or requires higher privileges.",
-        });
+        };
+        // res.status(403).json({
+        //   error:
+        //     "Forbidden. You do not have permission to access the requested resource. This resource belongs to another user or requires higher privileges.",
+        // });
       }
 
       if (!task) {
-        return res.status(404).json({
-          error: "Not found",
-        });
+        return {
+          task: null,
+          status: 404,
+          message: "Not found.",
+        };
+        // res.status(404).json({
+        //   error: "Not found",
+        // });
       }
+
+      // return res
+      //   .status(200)
+      //   .json({ message: "Task retrieved successfully.", task });
+      return { task, status: null, message: null };
+    } catch (error) {
+      console.error(error);
+      return {
+        task: null,
+        status: 500,
+        message:
+          "The server encountered an unexpected condition that prevented it from fulfilling the request. Please try again later or contact the administrator.",
+      };
+      // res.status(500).json({
+      //   error:
+      //     "The server encountered an unexpected condition that prevented it from fulfilling the request. Please try again later or contact the administrator.",
+      // });
+    }
+  },
+  updateTask: async (req, res) => {
+    const userId = req.auth.id;
+    const taskId = req.params.id;
+
+    if (!taskId) {
+      return res.status(400).json({
+        error:
+          "The server could not process the request because a required parameter is missing. Please include all necessary parameters and try again.",
+      });
+    }
+
+    try {
+      TaskController.getSingleTask(req);
+
+      const credentials = { isDone: req.body.isDone };
+
+      const updatedTask = await prisma.task.update({
+        where: {
+          id: taskId,
+        },
+        data: credentials,
+        select: {
+          id: true,
+          content: true,
+          isDone: true,
+        },
+      });
 
       return res
         .status(200)
-        .json({ message: "Task retrieved successfully.", task });
+        .json({ message: "Task was updated successfully.", updatedTask });
     } catch (error) {
       console.error(error);
       res.status(500).json({
@@ -122,7 +186,6 @@ const TaskController = {
       });
     }
   },
-  updateTask: async (req, res) => {},
   deleteTask: async (req, res) => {},
 };
 

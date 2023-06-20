@@ -1,11 +1,11 @@
 import express from "express";
 import TaskController from "../controllers/taskController.js";
-import verifyTokenMiddleware from "../middlewares/verifyToken.js";
 
 const router = express.Router();
 
-router.post("/", verifyTokenMiddleware, TaskController.createTask);
-router.get("/", verifyTokenMiddleware, TaskController.getAllTasks);
-router.get("/:id", verifyTokenMiddleware, TaskController.getSingleTask);
+router.post("/", TaskController.createTask);
+router.get("/", TaskController.getAllTasks);
+router.get("/:id", TaskController.getSingleTask);
+router.patch("/:id", TaskController.updateTask);
 
 export default router;

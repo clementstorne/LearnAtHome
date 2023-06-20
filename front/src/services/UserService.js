@@ -1,7 +1,7 @@
 import axios from "./http-common";
 
 /**
- * Service for fetching user's data.
+ * Service for user's data.
  */
 class UserService {
   static getUserData = async () => {

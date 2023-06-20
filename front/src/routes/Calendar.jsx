@@ -2,7 +2,7 @@
 import "../main.scss";
 
 /** Components */
-import { Header, Navbar } from "../components/index";
+import { Header, Navbar, ActionButton } from "../components/index";
 
 /** Assets */
 
@@ -16,6 +16,7 @@ export default function Calendar() {
     <>
       <Header />
       <div className="calendar-wrapper">
+        <ActionButton category="calendar" />
         <h1>Calendrier</h1>
       </div>
       <Navbar />

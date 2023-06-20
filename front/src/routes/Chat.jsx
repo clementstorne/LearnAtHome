@@ -2,7 +2,7 @@
 import "../main.scss";
 
 /** Components */
-import { Header, Navbar } from "../components/index";
+import { Header, Navbar, ActionButton } from "../components/index";
 
 /** Assets */
 
@@ -16,6 +16,7 @@ export default function Chat() {
     <>
       <Header />
       <div className="chat-wrapper">
+        <ActionButton category="chat" />
         <h1>Messagerie</h1>
       </div>
       <Navbar />

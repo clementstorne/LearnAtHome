@@ -9,16 +9,23 @@ import PropTypes from "prop-types";
  * @param   {string}      source - The source URL of the profile picture.
  * @returns {JSX.Element}        - The rendered ProfilePicture component.
  */
-export default function ProfilePicture({ source }) {
+export default function ProfilePicture({ source, size }) {
   return (
     <img
       src={source}
       alt="Photo de profil de l'utilisateur"
       className="profile-picture"
+      width={size}
+      height={size}
     />
   );
 }
 
 ProfilePicture.propTypes = {
   source: PropTypes.string.isRequired,
+  size: PropTypes.string,
+};
+
+ProfilePicture.defaultProps = {
+  size: "80",
 };

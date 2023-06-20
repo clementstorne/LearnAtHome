@@ -4,6 +4,7 @@
   flex-flow: row nowrap;
   justify-content: flex-start;
   align-items: center;
+  position: relative;
 
   &-icon {
     width: 40px;
@@ -19,12 +20,19 @@
   &-checkbox {
     opacity: 0;
     position: absolute;
-    width: 40px;
-    height: 40px;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
     margin: 0;
+    top: 0;
+    left: 0;
   }
 
   &-label {
-    cursor: pointer;
+    text-align: start !important;
+
+    &-done {
+      text-decoration: line-through;
+    }
   }
 }
