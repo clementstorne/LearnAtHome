@@ -4,28 +4,31 @@ import "../main.scss";
 /** PropTypes */
 import PropTypes from "prop-types";
 
+/** Components */
+import { PasswordConstraint } from "./index";
+
 /** Assets */
 import { BsExclamationTriangleFill } from "react-icons/bs";
 
 /**
- * A profile field input component.
+ * A password input field component with constraints.
  * @param   {boolean}     isRequired   - Indicates if the input field is required.
  * @param   {string}      className    - The CSS class name for the input field container.
  * @param   {string}      id           - The unique identifier for the password field.
  * @param   {string}      label        - The label text for the password field.
  * @param   {string}      errorMessage - The error message to display.
- * @param   {string}      value        - The current value of the input field.
  * @param   {Function}    event        - The callback function called when a change is made to the input field.
+ * @param   {object}      constraints  - The password constraints configuration object.
  * @returns {JSX.Element}              - The input field component.
  */
-export default function ProfileField({
+export default function FieldPassword({
   isRequired,
   className,
   id,
   label,
   errorMessage,
-  value,
   event,
+  constraints,
 }) {
   return (
     <div className={`${className}-field`}>
@@ -41,32 +44,62 @@ export default function ProfileField({
         {label}
       </label>
       <input
-        type="text"
-        autoComplete={id}
+        type="password"
+        autoComplete="new-password"
         id={id}
         aria-describedby={`${id}-label`}
         required={isRequired}
         aria-required={isRequired}
         spellCheck="false"
         className={`${className}-input`}
-        value={value}
         onChange={event}
       />
-      <div className={`${className}-field-error`}>{errorMessage}</div>
+      <div className={`${className}-field-constraint-wrapper`}>
+        <PasswordConstraint
+          className={`${className}-field`}
+          test={constraints.oneUpperCaseLetter}
+          text="une majuscule"
+          message="Le mot de passe doit contenir une majuscule"
+        ></PasswordConstraint>
+        <PasswordConstraint
+          className={`${className}-field`}
+          test={constraints.oneLowerCaseLetter}
+          text="une minuscule"
+          message="Le mot de passe doit contenir une minuscule"
+        ></PasswordConstraint>
+        <PasswordConstraint
+          className={`${className}-field`}
+          test={constraints.oneNumber}
+          text="un chiffre"
+          message="Le mot de passe doit contenir un chiffre"
+        ></PasswordConstraint>
+        <PasswordConstraint
+          className={`${className}-field`}
+          test={constraints.oneSpecialCharacter}
+          text="un caractère spécial"
+          message="Le mot de passe doit contenir un caractère spécial"
+        ></PasswordConstraint>
+        <PasswordConstraint
+          className={`${className}-field`}
+          test={constraints.minimumLength}
+          text="8 caractères minimum"
+          message="Le mot de passe doit contenir au minimum 8 caractères"
+        ></PasswordConstraint>
+      </div>
     </div>
   );
 }
 
-ProfileField.propTypes = {
+FieldPassword.propTypes = {
   isRequired: PropTypes.bool,
   className: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   errorMessage: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
   event: PropTypes.func.isRequired,
+  constraints: PropTypes.object.isRequired,
 };
 
-ProfileField.defaultProps = {
+FieldPassword.defaultProps = {
   isRequired: false,
 };

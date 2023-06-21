@@ -8,16 +8,16 @@ import { useEffect } from "react";
 import {
   Header,
   Navbar,
-  ActionButton,
+  ButtonAction,
   ProfilePicture,
   TodoItem,
+  ModalForm,
 } from "../components/index";
 
 /** Store */
 import { useSelector, useDispatch } from "react-redux";
 import { getData } from "../store/userSlice.js";
 import { getAllTasks } from "../store/taskSlice";
-// import { openModal } from "../store/modalSlice.js";
 
 /** Assets */
 import defaultProfilePicture from "../assets/default-profile-picture.png";
@@ -44,8 +44,9 @@ export default function ToDoList() {
   return (
     <>
       <Header />
+      <ModalForm />
       <div className="todo-wrapper">
-        <ActionButton category="todo" />
+        <ButtonAction category="todo" />
 
         <div className="todo-header">
           <span></span>
@@ -66,14 +67,16 @@ export default function ToDoList() {
         </div>
 
         <div className="todo-list">
-          {taskList.map((task) => (
-            <TodoItem
-              text={task.content}
-              status={task.isDone}
-              taskId={task.id}
-              key={task.id}
-            />
-          ))}
+          {taskList.length === 0
+            ? "Vous n'avez aucune tâche à compléter, créez-en une"
+            : taskList.map((task) => (
+                <TodoItem
+                  text={task.content}
+                  status={task.isDone}
+                  taskId={task.id}
+                  key={task.id}
+                />
+              ))}
         </div>
       </div>
       <Navbar />

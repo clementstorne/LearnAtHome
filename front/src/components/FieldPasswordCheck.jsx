@@ -17,7 +17,7 @@ import { BsExclamationTriangleFill } from "react-icons/bs";
  * @param   {Function}    event        - The callback function called when a change is made to the input field.
  * @returns {JSX.Element}              - The input field component.
  */
-export default function PasswordCheckField({
+export default function FieldPasswordCheck({
   isRequired,
   className,
   id,
@@ -54,7 +54,7 @@ export default function PasswordCheckField({
   );
 }
 
-PasswordCheckField.propTypes = {
+FieldPasswordCheck.propTypes = {
   isRequired: PropTypes.bool,
   className: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
@@ -63,6 +63,6 @@ PasswordCheckField.propTypes = {
   event: PropTypes.func.isRequired,
 };
 
-PasswordCheckField.defaultProps = {
+FieldPasswordCheck.defaultProps = {
   isRequired: false,
 };

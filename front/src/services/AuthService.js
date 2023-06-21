@@ -13,10 +13,6 @@ class AuthService {
    * @param   {String}  credentials.role      The user's role.
    * @return  {String}                        JSON Web Token.
    */
-  static signupTutor = async (credentials) => {
-    return axios.post("auth/signup/tutors", credentials);
-  };
-
   static signup = async (credentials) => {
     return axios.post("auth/signup", credentials);
   };

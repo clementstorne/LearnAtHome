@@ -4,6 +4,11 @@ import axios from "./http-common";
  * Service for user's tasks.
  */
 class TaskService {
+  static createTask = async (credentials) => {
+    const token = localStorage.getItem("Learn@Home_token");
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    return axios.post("/tasks", credentials);
+  };
   static getAllTasks = async () => {
     const token = localStorage.getItem("Learn@Home_token");
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;

@@ -10,6 +10,22 @@ const initialState = {
   error: null,
 };
 
+export const createTask = createAsyncThunk(
+  "tasks/createTask",
+  async (credentials, thunkAPI) => {
+    try {
+      const res = await TaskService.createTask(credentials);
+      if (res.status >= 200 && res.status <= 209) {
+        return res.data;
+      } else {
+        return thunkAPI.rejectWithValue(res.errorr);
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
 export const getAllTasks = createAsyncThunk(
   "tasks/getAllTasks",
   async (thunkAPI) => {
@@ -48,6 +64,19 @@ const taskSlice = createSlice({
   initialState,
   extraReducers: (builder) => {
     builder
+      .addCase(createTask.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(createTask.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.tasksList = [...state.tasksList, action.payload.task];
+      })
+      .addCase(createTask.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
       .addCase(getAllTasks.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -81,5 +110,4 @@ const taskSlice = createSlice({
   },
 });
 
-// export const { logout } = authSlice.actions;
 export default taskSlice.reducer;

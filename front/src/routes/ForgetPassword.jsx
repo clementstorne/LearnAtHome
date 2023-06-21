@@ -8,12 +8,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 /** Components */
-import {
-  Header,
-  LinkLogin,
-  LinkSignup,
-  ProfileField,
-} from "../components/index";
+import { Header, LinkLogin, LinkSignup, FieldText } from "../components/index";
 
 /** Helpers */
 import FormValidatorHelpers from "../helpers/FormValidatorHelpers";
@@ -94,7 +89,7 @@ export default function ForgetPassword() {
 
       <div className="login-form-wrapper">
         <form id="login-form" action="" onSubmit={handleForgetPassword}>
-          <ProfileField
+          <FieldText
             isRequired={true}
             className="login"
             id="email"

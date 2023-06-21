@@ -10,8 +10,8 @@ import {
   Navbar,
   Button,
   Modal,
-  ProfileField,
-  PasswordField,
+  FieldText,
+  FieldPassword,
   ProfilePicture,
 } from "../components/index";
 
@@ -43,7 +43,6 @@ export default function Profile() {
   const imageInStore = useSelector((state) => state.user.profilePicture);
 
   const [imageBase64url, setImageBase64url] = useState("");
-  // const [defautlImageUrl, setDefautlImageUrl] = useState(defaultProfilePicture);
   const [imageFile, setImageFile] = useState(null);
 
   const [name, setName] = useState("");
@@ -253,7 +252,7 @@ export default function Profile() {
         </div>
         <div className="profile-form-wrapper">
           <form id="profile-form" action="" onSubmit={handleUpdateProfile}>
-            <ProfileField
+            <FieldText
               className="profile"
               id="name"
               label="Nom complet"
@@ -261,7 +260,7 @@ export default function Profile() {
               value={name ? name : nameInStore}
               event={handleNameChange}
             />
-            <ProfileField
+            <FieldText
               className="profile"
               id="email"
               label="Email"
@@ -269,7 +268,7 @@ export default function Profile() {
               value={email ? email : emailInStore}
               event={handleEmailChange}
             />
-            <PasswordField
+            <FieldPassword
               className="profile"
               id="password"
               label="Mot de passe"

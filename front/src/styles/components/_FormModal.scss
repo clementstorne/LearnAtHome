@@ -1,0 +1,30 @@
+.form-modal {
+  width: 100%;
+  padding: 50px 10px 20px;
+  text-align: start;
+
+  &-button {
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    margin-top: 30px;
+    background: $color-tertiary;
+    color: $color-primary;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 300ms ease;
+
+    @include md {
+      max-width: 300px;
+    }
+
+    &:hover,
+    &:focus {
+      outline: none;
+      border: 4px solid $color-secondary;
+      background: $color-primary;
+      color: $color-secondary;
+    }
+  }
+}

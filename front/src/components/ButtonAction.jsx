@@ -4,6 +4,10 @@ import "../main.scss";
 /** PropTypes */
 import PropTypes from "prop-types";
 
+/** Store */
+import { useDispatch } from "react-redux";
+import { openFormModal } from "../store/modalSlice.js";
+
 /** Assets */
 import { BsPencilSquare, BsCalendarPlus, BsPlusSquare } from "react-icons/bs";
 
@@ -14,7 +18,9 @@ import { BsPencilSquare, BsCalendarPlus, BsPlusSquare } from "react-icons/bs";
  * @param   {boolean}     alert - Specifies whether the button has an alert style.
  * @returns {JSX.Element}       - The rendered Button component.
  */
-export default function Button({ category }) {
+export default function ButtonAction({ category }) {
+  const dispatch = useDispatch();
+
   function renderIcon(category) {
     switch (category) {
       case "todo":
@@ -27,9 +33,18 @@ export default function Button({ category }) {
         break;
     }
   }
-  return <button className="action-button">{renderIcon(category)}</button>;
+
+  function handleClick() {
+    dispatch(openFormModal());
+  }
+
+  return (
+    <button className="action-button" onClick={handleClick}>
+      {renderIcon(category)}
+    </button>
+  );
 }
 
-Button.propTypes = {
+ButtonAction.propTypes = {
   category: PropTypes.string.isRequired,
 };

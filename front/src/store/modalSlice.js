@@ -16,8 +16,15 @@ const modalSlice = createSlice({
     closeModal: (state) => {
       (state.isOpen = false), (state.message = "");
     },
+    openFormModal: (state) => {
+      state.isOpen = true;
+    },
+    closeFormModal: (state) => {
+      state.isOpen = false;
+    },
   },
 });
 
-export const { openModal, closeModal } = modalSlice.actions;
+export const { openModal, closeModal, openFormModal, closeFormModal } =
+  modalSlice.actions;
 export default modalSlice.reducer;

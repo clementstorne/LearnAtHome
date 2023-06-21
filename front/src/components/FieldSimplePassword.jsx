@@ -14,7 +14,7 @@ import PropTypes from "prop-types";
  * @param   {Function}    event      - The callback function called when a change is made to the input field.
  * @returns {JSX.Element}            - The input field component.
  */
-export default function SimplePasswordField({
+export default function FieldSimplePassword({
   isRequired,
   className,
   id,
@@ -42,7 +42,7 @@ export default function SimplePasswordField({
   );
 }
 
-SimplePasswordField.propTypes = {
+FieldSimplePassword.propTypes = {
   isRequired: PropTypes.bool,
   className: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
@@ -50,6 +50,6 @@ SimplePasswordField.propTypes = {
   event: PropTypes.func.isRequired,
 };
 
-SimplePasswordField.defaultProps = {
+FieldSimplePassword.defaultProps = {
   isRequired: false,
 };

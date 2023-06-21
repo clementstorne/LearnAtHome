@@ -12,8 +12,8 @@ import {
   Header,
   LinkForgetPassword,
   LinkSignup,
-  ProfileField,
-  SimplePasswordField,
+  FieldText,
+  FieldSimplePassword,
   Modal,
 } from "../components/index";
 
@@ -111,7 +111,7 @@ export default function Login() {
 
       <div className="login-form-wrapper">
         <form id="login-form" action="" onSubmit={handleLogin}>
-          <ProfileField
+          <FieldText
             isRequired={true}
             className="login"
             id="email"
@@ -120,7 +120,7 @@ export default function Login() {
             value={email}
             event={handleEmailChange}
           />
-          <SimplePasswordField
+          <FieldSimplePassword
             isRequired={true}
             className="login"
             id="password"

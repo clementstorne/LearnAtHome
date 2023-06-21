@@ -11,9 +11,9 @@ import { Navigate } from "react-router-dom";
 import {
   Header,
   LinkLogin,
-  ProfileField,
-  PasswordField,
-  PasswordCheckField,
+  FieldText,
+  FieldPassword,
+  FieldPasswordCheck,
   Modal,
 } from "../components/index";
 
@@ -213,7 +213,7 @@ export default function SignUp() {
 
       <div className="login-form-wrapper">
         <form id="login-form" action="" onSubmit={handleSignup}>
-          <ProfileField
+          <FieldText
             isRequired={true}
             className="login"
             id="name"
@@ -222,7 +222,7 @@ export default function SignUp() {
             value={name}
             event={handleNameChange}
           />
-          <ProfileField
+          <FieldText
             isRequired={true}
             className="login"
             id="email"
@@ -231,7 +231,7 @@ export default function SignUp() {
             value={email}
             event={handleEmailChange}
           />
-          <PasswordField
+          <FieldPassword
             isRequired={true}
             className="login"
             id="password"
@@ -240,7 +240,7 @@ export default function SignUp() {
             event={handlePasswordChange}
             constraints={passwordConstraints}
           />
-          <PasswordCheckField
+          <FieldPasswordCheck
             isRequired={true}
             className="login"
             id="password-confirmation"

@@ -9,6 +9,7 @@ const initialState = {
   name: "",
   email: "",
   profilePicture: null,
+  isTutor: false,
   isLoading: false,
   error: null,
 };
@@ -58,6 +59,7 @@ const userSlice = createSlice({
         state.name = action.payload.data.name;
         state.email = action.payload.data.email;
         state.profilePicture = action.payload.data.imageUrl;
+        state.isTutor = action.payload.data.role === "tutor";
       })
       .addCase(getData.rejected, (state, action) => {
         state.isLoading = false;
