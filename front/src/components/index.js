@@ -1,4 +1,5 @@
-export { default as AuthGuard } from "./AuthGuard";
+export { default as GuardAuth } from "./GuardAuth";
+export { default as GuardTutor } from "./GuardTutor";
 export { default as Header } from "./Header";
 export { default as Navbar } from "./Navbar";
 export { default as Button } from "./Button";

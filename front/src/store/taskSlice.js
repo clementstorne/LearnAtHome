@@ -62,6 +62,13 @@ export const updateTask = createAsyncThunk(
 const taskSlice = createSlice({
   name: "task",
   initialState,
+  reducers: {
+    resetTaskState: (state) => {
+      state.tasksList = [];
+      state.isLoading = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createTask.pending, (state) => {
@@ -71,7 +78,7 @@ const taskSlice = createSlice({
       .addCase(createTask.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.tasksList = [...state.tasksList, action.payload.task];
+        state.tasksList = [action.payload.task, ...state.tasksList];
       })
       .addCase(createTask.rejected, (state, action) => {
         state.isLoading = false;
@@ -110,4 +117,5 @@ const taskSlice = createSlice({
   },
 });
 
+export const { resetTaskState } = taskSlice.actions;
 export default taskSlice.reducer;

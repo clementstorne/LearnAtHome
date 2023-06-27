@@ -204,7 +204,6 @@ export default function Profile() {
         user.password = password;
       }
       formData.append("user", JSON.stringify(user));
-      console.log(formData);
       dispatch(updateProfile(formData));
       dispatch(openModal("Votre profil a été mis à jour"));
     }

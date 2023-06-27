@@ -4,6 +4,9 @@ import "../main.scss";
 /** React Router */
 import { Link } from "react-router-dom";
 
+/** Store */
+import { useSelector } from "react-redux";
+
 /** Assets */
 import {
   BsHouse,
@@ -11,6 +14,11 @@ import {
   BsCalendar4Week,
   BsListTask,
   BsFillPersonFill,
+  BsFillPersonLinesFill,
+  BsBriefcaseFill,
+  BsJournals,
+  BsPeopleFill,
+  BsPersonWorkspace,
 } from "react-icons/bs";
 
 /**
@@ -18,6 +26,8 @@ import {
  * @returns {JSX.Element} The rendered JSX element representing the navigation bar.
  */
 export default function Navbar() {
+  const isTutor = useSelector((state) => state.user.isTutor);
+
   return (
     <nav className="navbar">
       <ul className="navbar-nav">
@@ -26,6 +36,13 @@ export default function Navbar() {
             <BsHouse />
           </Link>
         </li>
+        {isTutor ? (
+          <li className="navbar-link navbar-separator">
+            <Link to={`/my-students`}>
+              <BsPeopleFill />
+            </Link>
+          </li>
+        ) : null}
         <li className="navbar-link navbar-separator">
           <Link to={`/profile`}>
             <BsFillPersonFill />

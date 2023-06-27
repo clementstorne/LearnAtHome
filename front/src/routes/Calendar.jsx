@@ -17,7 +17,6 @@ export default function Calendar() {
       <Header />
       <div className="calendar-wrapper">
         <ButtonAction category="calendar" />
-        <h1>Calendrier</h1>
       </div>
       <Navbar />
     </>

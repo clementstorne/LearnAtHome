@@ -46,6 +46,17 @@ export const updateProfile = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState,
+  reducers: {
+    resetUserState: (state) => {
+      state.id = null;
+      state.name = "";
+      state.email = "";
+      state.profilePicture = null;
+      state.isTutor = false;
+      state.isLoading = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getData.pending, (state) => {

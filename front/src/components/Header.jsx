@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 /** Store */
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/authSlice.js";
+import { resetTaskState } from "../store/taskSlice";
 
 /** PropTypes */
 import PropTypes from "prop-types";
@@ -27,6 +28,7 @@ export default function Header({ shadow }) {
   let isAuth = useSelector((state) => state.auth.isAuth);
 
   function handleLogout() {
+    dispatch(resetTaskState());
     dispatch(logout());
     navigate("/");
   }

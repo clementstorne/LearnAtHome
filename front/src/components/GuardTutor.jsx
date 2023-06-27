@@ -13,14 +13,14 @@ import PropTypes from "prop-types";
  * @param   {ReactNode} children - The child components to render if the user is authenticated.
  * @returns {ReactNode}          - The rendered child components or a redirect to the login page.
  */
-export default function AuthGuard({ children }) {
-  const isAuth = useSelector((state) => state.auth.isAuth);
-  if (!isAuth) {
-    return <Navigate to="/login" />;
+export default function GuardTutor({ children }) {
+  const isTutor = useSelector((state) => state.user.isTutor);
+  if (!isTutor) {
+    return <Navigate to="/" />;
   }
   return children;
 }
 
-AuthGuard.propTypes = {
+GuardTutor.propTypes = {
   children: PropTypes.node.isRequired,
 };

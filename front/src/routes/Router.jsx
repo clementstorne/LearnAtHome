@@ -9,10 +9,11 @@ import ForgetPassword from "./ForgetPassword";
 import Login from "./Login";
 import Profile from "./Profile";
 import SignUp from "./SignUp";
+import Students from "./Students";
 import ToDoList from "./ToDoList";
 
 /** Components */
-import AuthGuard from "../components/AuthGuard";
+import { GuardAuth, GuardTutor } from "../components/index";
 
 /**
  * The router component.
@@ -28,41 +29,49 @@ export default function Router() {
         <Route
           path="/"
           element={
-            <AuthGuard>
+            <GuardAuth>
               <Dashboard />
-            </AuthGuard>
+            </GuardAuth>
           }
         />
         <Route
           path="/calendar"
           element={
-            <AuthGuard>
+            <GuardAuth>
               <Calendar />
-            </AuthGuard>
+            </GuardAuth>
           }
         />
         <Route
           path="/chat"
           element={
-            <AuthGuard>
+            <GuardAuth>
               <Chat />
-            </AuthGuard>
+            </GuardAuth>
           }
         />
         <Route
           path="/todo"
           element={
-            <AuthGuard>
+            <GuardAuth>
               <ToDoList />
-            </AuthGuard>
+            </GuardAuth>
           }
         />
         <Route
           path="/profile"
           element={
-            <AuthGuard>
+            <GuardAuth>
               <Profile />
-            </AuthGuard>
+            </GuardAuth>
+          }
+        />
+        <Route
+          path="/my-students"
+          element={
+            <GuardTutor>
+              <Students />
+            </GuardTutor>
           }
         />
       </Routes>

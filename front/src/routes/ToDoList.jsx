@@ -2,7 +2,7 @@
 import "../main.scss";
 
 /** React */
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 /** Components */
 import {
@@ -28,11 +28,23 @@ import defaultProfilePicture from "../assets/default-profile-picture.png";
  * @returns {JSX.Element} - The todo page component.
  */
 export default function ToDoList() {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getData());
     dispatch(getAllTasks());
+
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const userName = useSelector((state) => state.user.name);
@@ -46,37 +58,53 @@ export default function ToDoList() {
       <Header />
       <ModalForm />
       <div className="todo-wrapper">
-        <ButtonAction category="todo" />
-
-        <div className="todo-header">
-          <span></span>
-          <ProfilePicture
-            source={userPicture ? userPicture : defaultProfilePicture}
-            size="40"
-          />
-          <div className="todo-title">
-            <div className="todo-owner">{userName}</div>
-            <div className="todo-message">
-              {tasksToComplete.length === 0
-                ? "Aucune tâche à compléter"
-                : tasksToComplete.length === 1
-                ? "1 tâche à compléter"
-                : `${tasksToComplete.length} tâches à compléter`}
+        <div className="todo-menu">
+          <ButtonAction category="todo" />
+        </div>
+        <div className="todo-list">
+          <div className="todo-header">
+            <ProfilePicture
+              source={userPicture ? userPicture : defaultProfilePicture}
+              size={windowWidth >= 768 ? "80" : "40"}
+            />
+            <div className="todo-title">
+              <div className="todo-owner">{userName}</div>
+              <div className="todo-message">
+                {tasksToComplete.length === 0
+                  ? "Aucune tâche à compléter"
+                  : tasksToComplete.length === 1
+                  ? "1 tâche à compléter"
+                  : `${tasksToComplete.length} tâches à compléter`}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="todo-list">
-          {taskList.length === 0
-            ? "Vous n'avez aucune tâche à compléter, créez-en une"
-            : taskList.map((task) => (
-                <TodoItem
-                  text={task.content}
-                  status={task.isDone}
-                  taskId={task.id}
-                  key={task.id}
-                />
-              ))}
+          <div className="todo-tasks">
+            {taskList.length === 0
+              ? "Vous n'avez aucune tâche à compléter, créez-en une"
+              : taskList.map((task) => (
+                  <TodoItem
+                    text={task.content}
+                    status={task.isDone}
+                    taskId={task.id}
+                    key={task.id}
+                  />
+                ))}
+            {/* <TodoItem text="texte" status={false} taskId="0" />
+            <TodoItem text="texte" status={false} taskId="0" />
+            <TodoItem text="texte" status={false} taskId="0" />
+            <TodoItem text="texte" status={false} taskId="0" />
+            <TodoItem text="texte" status={false} taskId="0" />
+            <TodoItem text="texte" status={false} taskId="0" />
+            <TodoItem text="texte" status={false} taskId="0" />
+            <TodoItem text="texte" status={false} taskId="0" />
+            <TodoItem text="texte" status={false} taskId="0" />
+            <TodoItem text="texte" status={false} taskId="0" />
+            <TodoItem text="texte" status={false} taskId="0" />
+            <TodoItem text="texte" status={false} taskId="0" />
+            <TodoItem text="texte" status={false} taskId="0" />
+            <TodoItem text="texte" status={false} taskId="0" /> */}
+          </div>
         </div>
       </div>
       <Navbar />

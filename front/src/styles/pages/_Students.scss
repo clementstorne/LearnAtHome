@@ -1,0 +1,11 @@
+.students {
+  &-wrapper {
+    @include auto-min-height-with-navbar;
+    padding: 0;
+    text-align: center;
+
+    @include md {
+      padding: 50px 70px 0 180px;
+    }
+  }
+}

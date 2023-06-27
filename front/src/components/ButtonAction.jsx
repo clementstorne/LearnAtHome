@@ -1,6 +1,9 @@
 /** Style */
 import "../main.scss";
 
+/** React */
+import { useState, useEffect } from "react";
+
 /** PropTypes */
 import PropTypes from "prop-types";
 
@@ -19,16 +22,26 @@ import { BsPencilSquare, BsCalendarPlus, BsPlusSquare } from "react-icons/bs";
  * @returns {JSX.Element}       - The rendered Button component.
  */
 export default function ButtonAction({ category }) {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [icon, setIcon] = useState(null);
+  const [label, setLabel] = useState("");
+
   const dispatch = useDispatch();
 
-  function renderIcon(category) {
+  function customizeButton(category) {
     switch (category) {
       case "todo":
-        return <BsPlusSquare />;
+        setIcon(<BsPlusSquare />);
+        setLabel("Ajouter une nouvelle tâche");
+        break;
       case "calendar":
-        return <BsCalendarPlus />;
+        setIcon(<BsCalendarPlus />);
+        setLabel("Ajouter un nouvel événement");
+        break;
       case "chat":
-        return <BsPencilSquare />;
+        setIcon(<BsPencilSquare />);
+        setLabel("Démarrer une nouvelle conversation");
+        break;
       default:
         break;
     }
@@ -38,9 +51,25 @@ export default function ButtonAction({ category }) {
     dispatch(openFormModal());
   }
 
+  useEffect(() => {
+    customizeButton(category);
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <button className="action-button" onClick={handleClick}>
-      {renderIcon(category)}
+      {icon}{" "}
+      <span className="action-button-label">
+        {windowWidth >= 768 ? `${label}` : ""}
+      </span>
     </button>
   );
 }

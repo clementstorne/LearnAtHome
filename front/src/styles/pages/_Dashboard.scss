@@ -3,9 +3,39 @@
     @include auto-min-height-with-navbar;
     padding: 30px 20px;
     text-align: center;
+    display: flex;
+    flex-flow: column nowrap;
 
     @include md {
-      padding: 30px 70px 0 180px;
+      padding: 50px 70px 0 180px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      column-gap: 70px;
+    }
+  }
+
+  &-section {
+    margin-bottom: 30px;
+  }
+
+  &-title {
+    color: $color-primary;
+    font-size: 24px;
+    margin: 0 0 20px;
+
+    @include md {
+      text-align: start;
+      // font-size: 36px;
+    }
+  }
+
+  &-last-connection {
+    font-size: 14px;
+    margin: 0;
+
+    @include md {
+      text-align: start;
     }
   }
 }
