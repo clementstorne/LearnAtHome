@@ -32,6 +32,7 @@ export const getAllTasks = createAsyncThunk(
     try {
       const res = await TaskService.getAllTasks();
       if (res.status >= 200 && res.status <= 209) {
+        // console.log(res.data);
         return res.data;
       } else {
         return thunkAPI.rejectWithValue(res.errorr);

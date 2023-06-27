@@ -25,7 +25,7 @@ export default function Dashboard() {
   useEffect(() => {
     dispatch(getData());
     dispatch(getAllTasks());
-  });
+  }, []);
 
   const name = useSelector((state) => state.user.name);
   const taskList = useSelector((state) => state.tasks.tasksList);

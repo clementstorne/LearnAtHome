@@ -8,38 +8,44 @@ generator client {
 }
 
 model Tutor {
-  id           String    @id @default(uuid())
-  name         String    @db.VarChar(100)
-  email        String    @unique(map: "email") @db.VarChar(100)
-  password     String    @db.VarChar(64)
-  imageUrl     String?   @db.VarChar(255)
-  role         Roles
-  isAvailable  Boolean   @default(false)
-  createdAt    DateTime  @default(now()) @db.DateTime(0)
-  updatedAt    DateTime? @updatedAt @db.DateTime(0)
-  students     Student[]
-  grades       Grade[]
-  subjects     Subject[]
-  events       Event[]
-  messages     Message[]
-  tasksCreated Task[]    @relation("TutorCreatedTask")
-  tasksOwned   Task[]    @relation("TutorOwnsTask")
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(100)
+  email       String    @unique(map: "email") @db.VarChar(100)
+  password    String    @db.VarChar(64)
+  imageUrl    String?   @db.VarChar(255)
+  role        Roles
+  isAvailable Boolean   @default(false)
+  createdAt   DateTime  @default(now()) @db.DateTime(0)
+  updatedAt   DateTime? @updatedAt @db.DateTime(0)
+  students    Student[]
+  // students     Student[]      @relation("StudentTutor")
+  // StudentTutor StudentTutor[]
+  grades      Grade[]
+  // grades       Grade[]        @relation("GradeTutor")
+  // GradeTutor   GradeTutor[]
+  subjects    Subject[]
+  // subjects     Subject[]      @relation("SubjectTutor")
+  // SubjectTutor SubjectTutor[]
+  events      Event[]
+  messages    Message[]
+  tasks       Task[]
 }
 
 model Student {
-  id           String      @id @default(uuid())
-  name         String      @db.VarChar(100)
-  email        String      @unique(map: "email") @db.VarChar(100)
-  password     String      @db.VarChar(64)
-  imageUrl     String?     @db.VarChar(255)
-  role         Roles
-  createdAt    DateTime    @default(now()) @db.DateTime(0)
-  updatedAt    DateTime?   @updatedAt @db.DateTime(0)
-  grade        Grade?      @relation(fields: [gradeName], references: [name], onDelete: Cascade)
-  gradeName    Grade_name?
-  tutors       Tutor[]
-  tasksCreated Task[]      @relation("StudentCreatedTask")
-  tasksOwned   Task[]      @relation("StudentOwnsTask")
+  id        String      @id @default(uuid())
+  name      String      @db.VarChar(100)
+  email     String      @unique(map: "email") @db.VarChar(100)
+  password  String      @db.VarChar(64)
+  imageUrl  String?     @db.VarChar(255)
+  role      Roles
+  createdAt DateTime    @default(now()) @db.DateTime(0)
+  updatedAt DateTime?   @updatedAt @db.DateTime(0)
+  grade     Grade?      @relation(fields: [gradeName], references: [name], onDelete: Cascade)
+  gradeName Grade_name?
+  tutors    Tutor[]
+  tasks     Task[]
+  // tutors       Tutor[]        @relation("StudentTutor")
+  // StudentTutor StudentTutor[]
 
   @@index([gradeName], map: "GradeName")
 }
@@ -50,6 +56,8 @@ model Grade {
   updatedAt DateTime?  @updatedAt @db.DateTime(0)
   students  Student[]
   tutors    Tutor[]
+  // tutors     Tutor[]      @relation("GradeTutor")
+  // GradeTutor GradeTutor[]
 }
 
 model Subject {
@@ -57,6 +65,8 @@ model Subject {
   createdAt DateTime     @default(now()) @db.DateTime(0)
   updatedAt DateTime?    @updatedAt @db.DateTime(0)
   tutors    Tutor[]
+  // tutors       Tutor[]        @relation("SubjectTutor")
+  // SubjectTutor SubjectTutor[]
 }
 
 model Message {
@@ -88,18 +98,46 @@ model Event {
 }
 
 model Task {
-  id             String    @id @default(uuid())
-  content        String    @db.VarChar(100)
-  isDone         Boolean   @default(false)
-  createdAt      DateTime  @default(now()) @db.DateTime(0)
-  updatedAt      DateTime? @updatedAt @db.DateTime(0)
-  creatorId      String    @db.Char(36)
-  tutorCreator   Tutor?    @relation("TutorCreatedTask", fields: [creatorId], references: [id], map: "tutor_creatorId", onDelete: Cascade)
-  studentCreator Student?  @relation("StudentCreatedTask", fields: [creatorId], references: [id], map: "student_creatorId", onDelete: Cascade)
-  ownerId        String    @db.Char(36)
-  tutorOwner     Tutor?    @relation("TutorOwnsTask", fields: [ownerId], references: [id], map: "tutor_ownerId", onDelete: Cascade)
-  studentOwner   Student?  @relation("StudentOwnsTask", fields: [ownerId], references: [id], map: "student_ownerId", onDelete: Cascade)
+  id        String    @id @default(uuid())
+  content   String    @db.VarChar(100)
+  isDone    Boolean   @default(false)
+  createdAt DateTime  @default(now()) @db.DateTime(0)
+  updatedAt DateTime? @updatedAt @db.DateTime(0)
+  ownerId   String    @db.Char(36)
+  creatorId String    @db.Char(36)
+  TutorId   String?   @db.Char(36)
+  Tutor     Tutor?    @relation(fields: [TutorId], references: [id], onDelete: Cascade)
+  StudentId String?   @db.Char(36)
+  Student   Student?  @relation(fields: [StudentId], references: [id], onDelete: Cascade)
+
+  @@index([TutorId], map: "TutorId")
 }
+
+// Tables d'association
+
+// model StudentTutor {
+//   id        String  @id @default(uuid())
+//   studentId String
+//   student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+//   tutorId   String
+//   tutor     Tutor   @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+// }
+
+// model GradeTutor {
+//   id        String     @id @default(uuid())
+//   gradeName Grade_name
+//   grade     Grade      @relation(fields: [gradeName], references: [name], onDelete: Cascade)
+//   tutorId   String
+//   tutor     Tutor      @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+// }
+
+// model SubjectTutor {
+//   id          String       @id @default(uuid())
+//   subjectName Subject_name
+//   subject     Subject      @relation(fields: [subjectName], references: [name], onDelete: Cascade)
+//   tutorId     String
+//   tutor       Tutor        @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+// }
 
 // Enumerations
 

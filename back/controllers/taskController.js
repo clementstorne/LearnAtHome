@@ -9,8 +9,7 @@ const TaskController = {
 
     const creatorId = userId;
     const { content } = req.body;
-    const ownerId = userId;
-    // let ownerId = null;
+    let ownerId = null;
 
     if (!content) {
       return res.status(400).json({
@@ -19,30 +18,18 @@ const TaskController = {
       });
     }
 
-    // if (userRole === "student") {
-    //   ownerId = userId;
-    // } else {
-    //   ownerId = userId;
-    // }
+    if (userRole === "student") {
+      ownerId = userId;
+    } else {
+      ownerId = userId;
+    }
 
     try {
       const task = await prisma.task.create({
         data: {
           content,
-          // creatorId,
-          // ownerId,
-          tutorCreator: {
-            connect: { id: creatorId },
-          },
-          // studentCreator: {
-          //   connect: { id: creatorId },
-          // },
-          tutorOwner: {
-            connect: { id: ownerId },
-          },
-          // studentOwner: {
-          //   connect: { id: ownerId },
-          // },
+          creatorId,
+          ownerId,
         },
       });
 
@@ -63,7 +50,7 @@ const TaskController = {
     try {
       const tasks = await prisma.task.findMany({
         where: {
-          ownerId: userId,
+          creatorId: userId,
         },
         select: {
           id: true,
