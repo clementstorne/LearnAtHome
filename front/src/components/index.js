@@ -1,4 +1,5 @@
 export { default as GuardAuth } from "./GuardAuth";
+export { default as GuardStudent } from "./GuardStudent";
 export { default as GuardTutor } from "./GuardTutor";
 export { default as Header } from "./Header";
 export { default as Navbar } from "./Navbar";
@@ -17,4 +18,5 @@ export { default as FieldSimplePassword } from "./FieldSimplePassword";
 export { default as FieldText } from "./FieldText";
 export { default as PasswordConstraint } from "./PasswordConstraint";
 export { default as ProfilePicture } from "./ProfilePicture";
+export { default as TodoCard } from "./TodoCard";
 export { default as TodoItem } from "./TodoItem";

@@ -11,9 +11,10 @@ import Profile from "./Profile";
 import SignUp from "./SignUp";
 import Students from "./Students";
 import ToDoList from "./ToDoList";
+import Tutors from "./Tutors";
 
 /** Components */
-import { GuardAuth, GuardTutor } from "../components/index";
+import { GuardAuth, GuardTutor, GuardStudent } from "../components/index";
 
 /**
  * The router component.
@@ -72,6 +73,14 @@ export default function Router() {
             <GuardTutor>
               <Students />
             </GuardTutor>
+          }
+        />
+        <Route
+          path="/my-tutors"
+          element={
+            <GuardStudent>
+              <Tutors />
+            </GuardStudent>
           }
         />
       </Routes>

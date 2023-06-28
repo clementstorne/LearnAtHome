@@ -2,19 +2,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 /** Services */
-import TaskService from "../services/TaskService";
+import TodoService from "../services/TodoService";
 
 const initialState = {
-  tasksList: [],
+  todoList: [],
   isLoading: false,
   error: null,
 };
 
-export const createTask = createAsyncThunk(
-  "tasks/createTask",
+export const createTodo = createAsyncThunk(
+  "todos/createTodo",
   async (credentials, thunkAPI) => {
     try {
-      const res = await TaskService.createTask(credentials);
+      const res = await TodoService.createTodo(credentials);
       if (res.status >= 200 && res.status <= 209) {
         return res.data;
       } else {
@@ -26,11 +26,11 @@ export const createTask = createAsyncThunk(
   }
 );
 
-export const getAllTasks = createAsyncThunk(
-  "tasks/getAllTasks",
+export const getAllTodos = createAsyncThunk(
+  "todos/getAllTodos",
   async (thunkAPI) => {
     try {
-      const res = await TaskService.getAllTasks();
+      const res = await TodoService.getAllTodos();
       if (res.status >= 200 && res.status <= 209) {
         return res.data;
       } else {
@@ -42,12 +42,12 @@ export const getAllTasks = createAsyncThunk(
   }
 );
 
-export const updateTask = createAsyncThunk(
-  "tasks/updateTask",
+export const updateTodo = createAsyncThunk(
+  "todos/updateTodo",
   async (credentials, thunkAPI) => {
-    const taskId = credentials.taskId;
+    const todoId = credentials.id;
     try {
-      const res = await TaskService.updateTask(taskId, credentials);
+      const res = await TodoService.updateTodo(todoId, credentials);
       if (res.status >= 200 && res.status <= 209) {
         return res.data;
       } else {
@@ -59,63 +59,63 @@ export const updateTask = createAsyncThunk(
   }
 );
 
-const taskSlice = createSlice({
-  name: "task",
+const todoSlice = createSlice({
+  name: "todo",
   initialState,
   reducers: {
-    resetTaskState: (state) => {
-      state.tasksList = [];
+    resetTodoState: (state) => {
+      state.todoList = [];
       state.isLoading = false;
       state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createTask.pending, (state) => {
+      .addCase(createTodo.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(createTask.fulfilled, (state, action) => {
+      .addCase(createTodo.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.tasksList = [action.payload.task, ...state.tasksList];
+        state.todoList = [action.payload.todo, ...state.todoList];
       })
-      .addCase(createTask.rejected, (state, action) => {
+      .addCase(createTodo.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
-      .addCase(getAllTasks.pending, (state) => {
+      .addCase(getAllTodos.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getAllTasks.fulfilled, (state, action) => {
+      .addCase(getAllTodos.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.tasksList = action.payload.tasks;
+        state.todoList = action.payload.todos;
       })
-      .addCase(getAllTasks.rejected, (state, action) => {
+      .addCase(getAllTodos.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
-      .addCase(updateTask.pending, (state) => {
+      .addCase(updateTodo.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(updateTask.fulfilled, (state, action) => {
+      .addCase(updateTodo.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.tasksList = state.tasksList.map((task) =>
-          task.id === action.payload.updatedTask.id
-            ? action.payload.updatedTask
-            : task
+        state.todoList = state.todoList.map((todo) =>
+          todo.id === action.payload.updatedTodo.id
+            ? action.payload.updatedTodo
+            : todo
         );
       })
-      .addCase(updateTask.rejected, (state, action) => {
+      .addCase(updateTodo.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });
   },
 });
 
-export const { resetTaskState } = taskSlice.actions;
-export default taskSlice.reducer;
+export const { resetTodoState } = todoSlice.actions;
+export default todoSlice.reducer;

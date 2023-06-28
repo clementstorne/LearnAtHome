@@ -8,15 +8,15 @@ generator client {
 }
 
 model Tutor {
-  id          String    @id @default(uuid())
-  name        String    @db.VarChar(100)
-  email       String    @unique(map: "email") @db.VarChar(100)
-  password    String    @db.VarChar(64)
-  imageUrl    String?   @db.VarChar(255)
+  id          String      @id @default(uuid())
+  name        String      @db.VarChar(100)
+  email       String      @unique(map: "email") @db.VarChar(100)
+  password    String      @db.VarChar(64)
+  imageUrl    String?     @db.VarChar(255)
   role        Roles
-  isAvailable Boolean   @default(false)
-  createdAt   DateTime  @default(now()) @db.DateTime(0)
-  updatedAt   DateTime? @updatedAt @db.DateTime(0)
+  isAvailable Boolean     @default(false)
+  createdAt   DateTime    @default(now()) @db.DateTime(0)
+  updatedAt   DateTime?   @updatedAt @db.DateTime(0)
   students    Student[]
   // students     Student[]      @relation("StudentTutor")
   // StudentTutor StudentTutor[]
@@ -29,21 +29,23 @@ model Tutor {
   events      Event[]
   messages    Message[]
   tasks       Task[]
+  todo        TodoTutor[]
 }
 
 model Student {
-  id        String      @id @default(uuid())
-  name      String      @db.VarChar(100)
-  email     String      @unique(map: "email") @db.VarChar(100)
-  password  String      @db.VarChar(64)
-  imageUrl  String?     @db.VarChar(255)
+  id        String        @id @default(uuid())
+  name      String        @db.VarChar(100)
+  email     String        @unique(map: "email") @db.VarChar(100)
+  password  String        @db.VarChar(64)
+  imageUrl  String?       @db.VarChar(255)
   role      Roles
-  createdAt DateTime    @default(now()) @db.DateTime(0)
-  updatedAt DateTime?   @updatedAt @db.DateTime(0)
-  grade     Grade?      @relation(fields: [gradeName], references: [name], onDelete: Cascade)
+  createdAt DateTime      @default(now()) @db.DateTime(0)
+  updatedAt DateTime?     @updatedAt @db.DateTime(0)
+  grade     Grade?        @relation(fields: [gradeName], references: [name], onDelete: Cascade)
   gradeName Grade_name?
   tutors    Tutor[]
   tasks     Task[]
+  todo      TodoStudent[]
   // tutors       Tutor[]        @relation("StudentTutor")
   // StudentTutor StudentTutor[]
 
@@ -78,8 +80,6 @@ model Message {
   updatedAt DateTime? @updatedAt @db.DateTime(0)
   tutorId   String    @db.Char(36)
   tutor     Tutor     @relation(fields: [tutorId], references: [id], onDelete: Cascade)
-
-  @@index([tutorId], map: "TutorId")
 }
 
 model Event {
@@ -93,8 +93,26 @@ model Event {
   updatedAt DateTime?      @updatedAt @db.DateTime(0)
   TutorId   String         @db.Char(36)
   Tutor     Tutor          @relation(fields: [TutorId], references: [id], onDelete: Cascade)
+}
 
-  @@index([TutorId], map: "TutorId")
+model TodoTutor {
+  id        String    @id @default(uuid())
+  content   String    @db.VarChar(100)
+  isDone    Boolean   @default(false)
+  createdAt DateTime  @default(now()) @db.DateTime(0)
+  updatedAt DateTime? @updatedAt @db.DateTime(0)
+  ownerId   String    @db.Char(36)
+  tutor     Tutor     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+}
+
+model TodoStudent {
+  id        String    @id @default(uuid())
+  content   String    @db.VarChar(100)
+  isDone    Boolean   @default(false)
+  createdAt DateTime  @default(now()) @db.DateTime(0)
+  updatedAt DateTime? @updatedAt @db.DateTime(0)
+  ownerId   String    @db.Char(36)
+  student   Student   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 }
 
 model Task {
@@ -103,14 +121,10 @@ model Task {
   isDone    Boolean   @default(false)
   createdAt DateTime  @default(now()) @db.DateTime(0)
   updatedAt DateTime? @updatedAt @db.DateTime(0)
-  ownerId   String    @db.Char(36)
   creatorId String    @db.Char(36)
-  TutorId   String?   @db.Char(36)
-  Tutor     Tutor?    @relation(fields: [TutorId], references: [id], onDelete: Cascade)
-  StudentId String?   @db.Char(36)
-  Student   Student?  @relation(fields: [StudentId], references: [id], onDelete: Cascade)
-
-  @@index([TutorId], map: "TutorId")
+  tutor     Tutor     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  ownerId   String    @db.Char(36)
+  student   Student   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 }
 
 // Tables d'association

@@ -43,6 +43,10 @@ select {
   display: none !important;
 }
 
+.color-primary {
+  color: $color-primary;
+}
+
 .color-secondary {
   color: $color-secondary;
 }

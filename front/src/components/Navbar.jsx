@@ -14,10 +14,7 @@ import {
   BsCalendar4Week,
   BsListTask,
   BsFillPersonFill,
-  BsFillPersonLinesFill,
   BsBriefcaseFill,
-  BsJournals,
-  BsPeopleFill,
   BsPersonWorkspace,
 } from "react-icons/bs";
 
@@ -39,10 +36,16 @@ export default function Navbar() {
         {isTutor ? (
           <li className="navbar-link navbar-separator">
             <Link to={`/my-students`}>
-              <BsPeopleFill />
+              <BsBriefcaseFill />
             </Link>
           </li>
-        ) : null}
+        ) : (
+          <li className="navbar-link navbar-separator">
+            <Link to={`/my-tutors`}>
+              <BsPersonWorkspace />
+            </Link>
+          </li>
+        )}
         <li className="navbar-link navbar-separator">
           <Link to={`/profile`}>
             <BsFillPersonFill />

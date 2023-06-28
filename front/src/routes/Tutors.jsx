@@ -16,7 +16,7 @@ import { getData } from "../store/userSlice.js";
  * @component
  * @returns {JSX.Element} - The todo page component.
  */
-export default function Students() {
+export default function Tutors() {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -26,8 +26,8 @@ export default function Students() {
   return (
     <>
       <Header />
-      <div className="students-wrapper">
-        <h1>Mes étudiants</h1>
+      <div className="tutors-wrapper">
+        <h1>Mes tuteurs</h1>
       </div>
       <Navbar />
     </>

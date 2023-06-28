@@ -1,0 +1,42 @@
+.todo-card {
+  cursor: pointer;
+  width: 100%;
+  // margin: 20px 0;
+  padding: 30px 20px 20px;
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  grid-template-rows: 45px;
+  column-gap: 10px;
+  align-items: center;
+  box-shadow: 0px 4px 4px rgba($black, 0.25);
+
+  &:hover {
+    background: rgba($color-primary, 20%);
+  }
+
+  @include md {
+    padding: 20px;
+    grid-template-columns: 80px 1fr;
+    grid-template-rows: 80px;
+    column-gap: 20px;
+    box-shadow: none;
+    border-bottom: 1px solid $medium-gray;
+  }
+
+  &-content {
+    text-align: start;
+  }
+
+  &-owner {
+    font-size: 20px;
+    font-weight: 700;
+    color: $color-primary;
+    margin: 0;
+  }
+
+  &-message {
+    font-size: 16px;
+    color: $dark-gray;
+    margin: 0;
+  }
+}

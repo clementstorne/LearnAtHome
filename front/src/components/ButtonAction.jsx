@@ -12,7 +12,12 @@ import { useDispatch } from "react-redux";
 import { openFormModal } from "../store/modalSlice.js";
 
 /** Assets */
-import { BsPencilSquare, BsCalendarPlus, BsPlusSquare } from "react-icons/bs";
+import {
+  BsPencilSquare,
+  BsCalendarPlus,
+  BsJournalPlus,
+  BsClipboardPlus,
+} from "react-icons/bs";
 
 /**
  * A big button component.
@@ -31,8 +36,12 @@ export default function ButtonAction({ category }) {
   function customizeButton(category) {
     switch (category) {
       case "todo":
-        setIcon(<BsPlusSquare />);
+        setIcon(<BsClipboardPlus />);
         setLabel("Ajouter une nouvelle tâche");
+        break;
+      case "task":
+        setIcon(<BsJournalPlus />);
+        setLabel("Donner un devoir");
         break;
       case "calendar":
         setIcon(<BsCalendarPlus />);

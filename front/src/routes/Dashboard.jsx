@@ -10,7 +10,7 @@ import { Header, Navbar, TodoItem } from "../components/index";
 /** Store */
 import { useSelector, useDispatch } from "react-redux";
 import { getData } from "../store/userSlice.js";
-import { getAllTasks } from "../store/taskSlice";
+import { getAllTodos } from "../store/todoSlice";
 
 /** Assets */
 
@@ -24,13 +24,13 @@ export default function Dashboard() {
 
   useEffect(() => {
     dispatch(getData());
-    dispatch(getAllTasks());
+    dispatch(getAllTodos());
   }, []);
 
   const name = useSelector((state) => state.user.name);
-  const taskList = useSelector((state) => state.tasks.tasksList);
-  const latestTasks = taskList.slice(0, 4);
-  const tasksToComplete = taskList.filter((task) => task.isDone === false);
+  const todoList = useSelector((state) => state.todos.todoList);
+  const latestTasks = todoList.slice(0, 4);
+  const tasksToComplete = todoList.filter((task) => task.isDone === false);
 
   return (
     <>
@@ -52,14 +52,14 @@ export default function Dashboard() {
           <h1 className="dashboard-title">
             Mes tâches ({tasksToComplete.length})
           </h1>
-          {taskList.length === 0
+          {todoList.length === 0
             ? "Vous n'avez aucune tâche à compléter."
-            : latestTasks.map((task) => (
+            : latestTasks.map((todo) => (
                 <TodoItem
-                  text={task.content}
-                  status={task.isDone}
-                  taskId={task.id}
-                  key={task.id}
+                  text={todo.content}
+                  status={todo.isDone}
+                  id={todo.id}
+                  key={todo.id}
                 />
               ))}
         </section>

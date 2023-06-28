@@ -128,7 +128,7 @@ const AuthController = {
         {
           id: user.id,
           email: user.email,
-          isTutor: !!user.role,
+          isTutor: user.role === "tutor",
         },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_DURING }

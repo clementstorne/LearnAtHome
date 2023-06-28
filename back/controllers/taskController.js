@@ -67,7 +67,7 @@ const TaskController = {
         ],
       });
 
-      if (tasks.length === 0) {
+      if (!tasks) {
         return res.status(404).json({
           error: "Not found",
         });

@@ -10,7 +10,8 @@ import { FormModalField, FormModalSelect } from "./index";
 /** Store */
 import { useSelector, useDispatch } from "react-redux";
 import { closeFormModal } from "../store/modalSlice.js";
-import { createTask } from "../store/taskSlice";
+// import { createTask } from "../store/taskSlice";
+import { createTodo } from "../store/todoSlice";
 
 /** Assets */
 import { BsXLg } from "react-icons/bs";
@@ -41,7 +42,8 @@ export default function ModalForm() {
   function handleSubmit(e) {
     e.preventDefault();
     const credentials = { content };
-    dispatch(createTask(credentials));
+    dispatch(createTodo(credentials));
+    // dispatch(createTask(credentials));
     dispatch(closeFormModal());
   }
 
