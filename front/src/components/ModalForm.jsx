@@ -2,27 +2,25 @@
 import "../main.scss";
 
 /** React */
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+
+/** PropTypes */
+import PropTypes from "prop-types";
 
 /** Components */
-import { FormModalField, FormModalSelect } from "./index";
+import { FormTask, FormTodo } from "./index";
 
 /** Store */
 import { useSelector, useDispatch } from "react-redux";
 import { closeFormModal } from "../store/modalSlice.js";
-// import { createTask } from "../store/taskSlice";
-import { createTodo } from "../store/todoSlice";
 
 /** Assets */
 import { BsXLg } from "react-icons/bs";
 
-export default function ModalForm() {
+export default function ModalForm({ category }) {
   const dispatch = useDispatch();
 
   const isOpen = useSelector((state) => state.modal.isOpen);
-  const isTutor = useSelector((state) => state.user.isTutor);
-
-  const [content, setContent] = useState("");
 
   function toggleModal() {
     dispatch(closeFormModal());
@@ -34,17 +32,15 @@ export default function ModalForm() {
     }
   }
 
-  function handleContentChange(e) {
-    const { value } = e.target;
-    setContent(value);
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    const credentials = { content };
-    dispatch(createTodo(credentials));
-    // dispatch(createTask(credentials));
-    dispatch(closeFormModal());
+  function renderForm(category) {
+    switch (category) {
+      case "todo":
+        return <FormTodo />;
+      case "task":
+        return <FormTask />;
+      default:
+        break;
+    }
   }
 
   useEffect(() => {
@@ -65,33 +61,12 @@ export default function ModalForm() {
         <span className="modal-close-button" onClick={toggleModal}>
           <BsXLg />
         </span>
-        <form
-          id="form-modal"
-          className="form-modal"
-          action=""
-          onSubmit={handleSubmit}
-        >
-          <FormModalField
-            id="task"
-            label="Tâche à accomplir"
-            event={handleContentChange}
-          />
-          {isTutor ? (
-            <FormModalSelect
-              id="owner"
-              label="Qui doit accomplir cette tâche ?"
-            />
-          ) : (
-            ""
-          )}
-
-          <input
-            type="submit"
-            className="form-modal-button"
-            value="Créer la tâche"
-          />
-        </form>
+        {renderForm(category)}
       </div>
     </div>
   );
 }
+
+ModalForm.propTypes = {
+  category: PropTypes.string.isRequired,
+};

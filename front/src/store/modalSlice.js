@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isOpen: false,
   message: "",
+  category: "",
 };
 
 const modalSlice = createSlice({
@@ -11,16 +12,20 @@ const modalSlice = createSlice({
   initialState,
   reducers: {
     openModal: (state, action) => {
-      (state.isOpen = true), (state.message = action.payload);
+      state.isOpen = true;
+      state.message = action.payload;
     },
     closeModal: (state) => {
-      (state.isOpen = false), (state.message = "");
+      state.isOpen = false;
+      state.message = "";
     },
-    openFormModal: (state) => {
+    openFormModal: (state, action) => {
       state.isOpen = true;
+      state.category = action.payload;
     },
     closeFormModal: (state) => {
       state.isOpen = false;
+      state.category = "";
     },
   },
 });

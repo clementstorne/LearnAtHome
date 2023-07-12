@@ -57,7 +57,7 @@ export default function ButtonAction({ category }) {
   }
 
   function handleClick() {
-    dispatch(openFormModal());
+    dispatch(openFormModal(category));
   }
 
   useEffect(() => {

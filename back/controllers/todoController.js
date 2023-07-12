@@ -43,7 +43,6 @@ const TodoController = {
     }
   },
   getAllTodos: async (req, res) => {
-    console.log(req.auth);
     const userId = req.auth.id;
     const userRole = req.auth.isTutor;
 

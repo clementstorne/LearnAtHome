@@ -41,7 +41,7 @@ export default function TodoCard({ name, picture, taskList }) {
       />
       <div className="todo-card-content">
         <h1 className="todo-card-owner">
-          {name === userName ? "Ma todo list" : { name }}
+          {name === userName ? "Ma todo list" : name}
         </h1>
         <p className="todo-card-message">
           {taskList.length === 0

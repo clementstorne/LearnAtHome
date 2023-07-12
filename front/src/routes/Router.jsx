@@ -10,7 +10,7 @@ import Login from "./Login";
 import Profile from "./Profile";
 import SignUp from "./SignUp";
 import Students from "./Students";
-import ToDoList from "./ToDoList";
+import Tasks from "./Tasks";
 import Tutors from "./Tutors";
 
 /** Components */
@@ -55,7 +55,7 @@ export default function Router() {
           path="/todo"
           element={
             <GuardAuth>
-              <ToDoList />
+              <Tasks />
             </GuardAuth>
           }
         />

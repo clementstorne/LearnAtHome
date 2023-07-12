@@ -2,17 +2,17 @@
 import "../main.scss";
 
 /** React */
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 /** Components */
 import {
   Header,
   Navbar,
   ButtonAction,
-  ProfilePicture,
   TodoItem,
   TodoCard,
   ModalForm,
+  ProfilePicture,
 } from "../components/index";
 
 /** Store */
@@ -21,73 +21,74 @@ import { getData } from "../store/userSlice.js";
 import { getAllTasks } from "../store/taskSlice";
 import { getAllTodos } from "../store/todoSlice";
 
-/** Assets */
-import defaultProfilePicture from "../assets/default-profile-picture.png";
-
 /**
  * Todo page component.
  * @component
  * @returns {JSX.Element} - The todo page component.
  */
-export default function ToDoList() {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
+export default function Tasks() {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getData());
-    dispatch(getAllTasks());
-    dispatch(getAllTodos());
-
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
+  const userId = useSelector((state) => state.user.id);
   const userName = useSelector((state) => state.user.name);
   const userPicture = useSelector((state) => state.user.profilePicture);
   const todoList = useSelector((state) => state.todos.todoList);
   // const taskList = useSelector((state) => state.tasks.tasksList);
 
-  const tasksToComplete = todoList.filter((task) => task.isDone === false);
+  const [userList, setUserList] = useState([]);
+
+  const category = useSelector((state) => state.modal.category);
+
+  useEffect(() => {
+    dispatch(getData());
+    dispatch(getAllTasks());
+    dispatch(getAllTodos());
+    const tasksToComplete = todoList.filter((task) => task.isDone === false);
+    const user = {
+      id: userId,
+      name: userName,
+      picture: userPicture,
+      taskList: tasksToComplete,
+    };
+    setUserList([
+      user,
+      {
+        id: 1,
+        name: "John Doe",
+        picture:
+          "https://i.pinimg.com/originals/39/e9/b3/39e9b39628e745a39f900dc14ee4d9a7.jpg",
+        taskList: [0, 0, 0, 0, 0],
+      },
+      {
+        id: 2,
+        name: "Jane Doe",
+        picture:
+          "https://i.pinimg.com/originals/39/e9/b3/39e9b39628e745a39f900dc14ee4d9a7.jpg",
+        taskList: [0, 0, 0],
+      },
+    ]);
+  }, [dispatch, userId, userName, userPicture, todoList]);
 
   return (
     <>
       <Header />
-      <ModalForm />
+      <ModalForm category={category} />
       <div className="todo-wrapper">
         <div className="todo-menu">
-          <TodoCard
-            name={userName}
-            picture={userPicture}
-            taskList={tasksToComplete}
-          />
+          {userName !== null &&
+            userList.length > 0 &&
+            userList.map((user, index) => (
+              <TodoCard
+                name={user.name}
+                picture={user.picture}
+                taskList={user.taskList}
+                key={index}
+              />
+            ))}
         </div>
         <div className="todo-list">
           <ButtonAction category="todo" />
           <ButtonAction category="task" />
-          {/* <div className="todo-header">
-            <ProfilePicture
-              source={userPicture ? userPicture : defaultProfilePicture}
-              size={windowWidth >= 768 ? "80" : "40"}
-            />
-            <div className="todo-title">
-              <div className="todo-owner">{userName}</div>
-              <div className="todo-message">
-                {tasksToComplete.length === 0
-                  ? "Aucune tâche à compléter"
-                  : tasksToComplete.length === 1
-                  ? "1 tâche à compléter"
-                  : `${tasksToComplete.length} tâches à compléter`}
-              </div>
-            </div>
-          </div> */}
 
           <div className="todo-tasks">
             {todoList.length === 0
